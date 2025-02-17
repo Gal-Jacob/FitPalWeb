@@ -1,0 +1,11 @@
+{
+  "name": "fitpalweb-be",
+  "version": "1.0.0",
+  "description": "fitpal web backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fitpal",
+  "license": "ISC"
+}
