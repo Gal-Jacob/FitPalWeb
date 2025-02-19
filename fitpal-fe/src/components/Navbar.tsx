@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,20 +12,26 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 
-const pages = ["Home", "Messages"];
-const settings = ["Profile", "Logout"];
+interface IPage {
+  name: string;
+  uri: string;
+}
+
+const pages: IPage[] = [
+  { name: "Home", uri: "Home" },
+  { name: "Messages", uri: "Messages" },
+];
+const settings: IPage[] = [
+  { name: "Profile", uri: "Profile" },
+  { name: "Login", uri: "Login" },
+];
 
 function NavBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
+  const navigate = useNavigate();
+
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -34,8 +41,8 @@ function NavBar() {
     setAnchorElUser(null);
   };
 
-  const handleMoveToPage = (page: string) => {
-    console.log(page);
+  const handleMoveToPage = (uri: string) => {
+    navigate(`/${uri}`);
   };
 
   const handleClickOnSetting = (page: string) => {
@@ -51,13 +58,13 @@ function NavBar() {
           <Box
             sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
           >
-            {pages.map((page) => (
+            {pages.map((page: IPage) => (
               <Button
-                key={page}
-                onClick={() => handleMoveToPage(page)}
+                key={page.name}
+                onClick={() => handleMoveToPage(page.uri)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -83,13 +90,13 @@ function NavBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {settings.map((setting: IPage) => (
                 <MenuItem
-                  key={setting}
-                  onClick={() => handleClickOnSetting(setting)}
+                  key={setting.name}
+                  onClick={() => handleClickOnSetting(setting.uri)}
                 >
                   <Typography sx={{ textAlign: "center" }}>
-                    {setting}
+                    {setting.name}
                   </Typography>
                 </MenuItem>
               ))}
