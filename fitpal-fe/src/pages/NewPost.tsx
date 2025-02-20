@@ -23,6 +23,8 @@ import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { JSX } from "react/jsx-runtime";
+import { useNavigate } from "react-router-dom";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 interface FormState {
   startTime: Dayjs | null;
@@ -32,6 +34,8 @@ interface FormState {
 }
 
 export default function NewPost() {
+  const navigate = useNavigate();
+
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormState>({
     startTime: null,
@@ -99,10 +103,20 @@ export default function NewPost() {
                     alignItems: "center",
                   }}
                 >
-                  <Avatar
-                    src={selectedImage || "https://via.placeholder.com/150"}
-                    sx={{ width: 150, height: 150 }}
-                  />
+                  {selectedImage ? (
+                    <Avatar
+                      src={selectedImage}
+                      sx={{ width: 150, height: 150 }}
+                    />
+                  ) : (
+                    <Avatar
+                      sx={{ width: 150, height: 150, backgroundColor: "white" }}
+                    >
+                      <AddPhotoAlternateIcon
+                        sx={{ width: 80, height: 80, color: "#7f7d7d" }}
+                      />
+                    </Avatar>
+                  )}
 
                   {/* Hidden file input */}
                   <input
@@ -116,6 +130,7 @@ export default function NewPost() {
                   {/* Upload Button */}
                   <label htmlFor="image-upload">
                     <Button
+                      sx={{ marginTop: 1 }}
                       variant="contained"
                       color="primary"
                       component="span"
@@ -206,6 +221,15 @@ export default function NewPost() {
                   sx={{ mt: 2 }}
                 >
                   Submit
+                </Button>
+                <Button
+                  onClick={() => navigate(-1)}
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ mt: 2 }}
+                >
+                  Cancel
                 </Button>
               </form>
             </Container>
