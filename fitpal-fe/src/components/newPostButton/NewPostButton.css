@@ -1,5 +1,5 @@
 #new-post-button {
-    position: absolute;
+    position: fixed;
     bottom: 15px;
     left: 15px;
 }
