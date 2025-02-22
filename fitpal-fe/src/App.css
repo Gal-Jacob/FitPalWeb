@@ -41,6 +41,10 @@
   color: #888;
 }
 
+.bright-background {
+  background-color: #8543f01e !important;
+}
+
 #home-page {
   margin: 60px 0px;
 }
