@@ -1,5 +1,7 @@
 # פרויקט סיום קורס FitPalWeb
 
+- **Mockup Figma**: [Android Mockup](https://www.figma.com/design/uk7zQq6Zhh46RWCadjJeZA/Android-mockup?node-id=0-1&p=f&t=CqWQEwvtxp8bWHkC-0)
+
 ## דרישות הפרויקט
 
 ### טכנולוגיות נדרשות
