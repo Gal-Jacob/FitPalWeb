@@ -24,11 +24,12 @@ import {
   ToggleButton,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-
+import { useNavigate } from "react-router-dom";
 import { IProfile, IExercise, IGuideline, ISchedule, IPost } from "../types";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import EditIcon from "@mui/icons-material/Edit";
 import NewPostButton from "../components/newPostButton/NewPostButton";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 interface IWorkoutPlane {
   exercises: IExercise[];
@@ -286,6 +287,8 @@ const PostsView: React.FC = () => {
 };
 
 const Profile: React.FC = () => {
+  const navigate = useNavigate();
+
   const [userProfile, setUserProfile] = useState<IProfile>({
     name: "Gal Yaakov",
     email: "GalYaakov100@gmail.com",
@@ -301,6 +304,10 @@ const Profile: React.FC = () => {
     newView: "workout" | "posts"
   ) => {
     setView(newView);
+  };
+
+  const handleOnClickEditProfile = (event: React.MouseEvent<HTMLElement>) => {
+    navigate(`/EditProfile`);
   };
 
   return (
@@ -331,7 +338,11 @@ const Profile: React.FC = () => {
           )}
         </Avatar>
         <Typography variant="h5">{userProfile.name}</Typography>
-        <IconButton color="primary" aria-label="like">
+        <IconButton
+          color="primary"
+          aria-label="like"
+          onClick={handleOnClickEditProfile}
+        >
           <EditIcon />
         </IconButton>
       </Container>
