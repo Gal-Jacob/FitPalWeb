@@ -1,3 +1,4 @@
+
 export interface IPost {
   owner: string;
   photo: string;
