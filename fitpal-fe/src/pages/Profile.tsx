@@ -202,6 +202,7 @@ const WorloutView: React.FC = () => {
 const PostsView: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>([
     {
+      postId: "1",
       owner: "Gal Yaakov",
       photo: "",
       title: "Workout finished",
@@ -210,6 +211,7 @@ const PostsView: React.FC = () => {
       details: "Today was a good Workout",
     },
     {
+      postId: "2",
       owner: "Yoav David",
       photo: "",
       title: "Workout finished",
@@ -218,6 +220,7 @@ const PostsView: React.FC = () => {
       details: "Today was a good Workout",
     },
     {
+      postId: "3",
       owner: "Ido Sharon",
       photo: "",
       title: "Workout finished",
@@ -290,6 +293,7 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState<IProfile>({
+    postId: "1",
     name: "Gal Yaakov",
     email: "GalYaakov100@gmail.com",
     gender: "male",

@@ -1,5 +1,17 @@
 
+export interface IComment {
+  owner: string;
+  text: string;
+}
+
+export interface IPostCommentsModalProps {
+    postId: string;
+    isOpen: boolean;
+    closeModal: (event: {}, reason: "backdropClick" | "escapeKeyDown") => void;
+}
+
 export interface IPost {
+  postId: string;
   owner: string;
   photo: string;
   title: string;
@@ -9,6 +21,7 @@ export interface IPost {
 }
 
 export interface IProfile {
+  id:string;
   name: string;
   email: string;
   photo: string;
