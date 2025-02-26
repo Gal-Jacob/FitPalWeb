@@ -20,6 +20,7 @@ import Post from "../components/post";
 
 const temp: IPost[] = [
   {
+    postId: "1",
     owner: "Gal Yaakov",
     photo: "",
     title: "Workout finished",
@@ -28,6 +29,7 @@ const temp: IPost[] = [
     details: "Today was a good Workout",
   },
   {
+    postId: "2",
     owner: "Yoav David",
     photo: "",
     title: "Workout finished",
@@ -36,6 +38,7 @@ const temp: IPost[] = [
     details: "Today was a good Workout",
   },
   {
+    postId: "3",
     owner: "Ido Sharon",
     photo: "",
     title: "Workout finished",
@@ -50,7 +53,7 @@ export default function Home() {
     <>
       <div id="home-page">
         {temp.map((post: IPost) => {
-          return <Post props={post} />;
+          return <Post key={post.postId} props={post} />;
         })}
       </div>
       <NewPostButton />
