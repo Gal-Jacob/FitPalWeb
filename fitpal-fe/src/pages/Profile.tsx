@@ -130,7 +130,7 @@ const WorloutView: React.FC = () => {
                   <Select
                     name="workout"
                     value={workout}
-                    onChange={handleChangeWorkout}
+                    //onChange={handleChangeWorkout}
                   >
                     <MenuItem value="FullBody">full body</MenuItem>
                     <MenuItem value="UpperBody">upper body</MenuItem>
@@ -293,7 +293,7 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState<IProfile>({
-    postId: "1",
+    id: "1",
     name: "Gal Yaakov",
     email: "GalYaakov100@gmail.com",
     gender: "male",

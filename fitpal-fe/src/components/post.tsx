@@ -138,11 +138,11 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
               sx={{ width: "100%" }}
               label="add comment"
               variant="outlined"
-              fullwidth
+              fullWidth
               value={addComment}
               onChange={handleOnChangeComment}
             />
-            <IconButton variant="contained" color="secondary">
+            <IconButton color="secondary">
               <SendIcon />
             </IconButton>
           </div>

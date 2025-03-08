@@ -148,51 +148,36 @@ export default function NewPost() {
                     padding: "0px",
                   }}
                 >
-                  {/* Start Time Picker */}
-                  <TimePicker
-                    label="Start Time"
-                    value={formData.startTime}
-                    onChange={(value: dayjs.Dayjs | null) =>
-                      handleTimeChange("startTime", value)
-                    }
-                    renderInput={(
-                      params: JSX.IntrinsicAttributes & {
-                        variant?: TextFieldVariants | undefined;
-                      } & Omit<
-                          | FilledTextFieldProps
-                          | OutlinedTextFieldProps
-                          | StandardTextFieldProps,
-                          "variant"
-                        >
-                    ) => <TextField {...params} fullWidth margin="normal" />}
-                  />
-                  {/* End Time Picker */}
-                  <TimePicker
-                    label="End Time"
-                    value={formData.endTime}
-                    onChange={(value: dayjs.Dayjs | null) =>
-                      handleTimeChange("endTime", value)
-                    }
-                    renderInput={(
-                      params: JSX.IntrinsicAttributes & {
-                        variant?: TextFieldVariants | undefined;
-                      } & Omit<
-                          | FilledTextFieldProps
-                          | OutlinedTextFieldProps
-                          | StandardTextFieldProps,
-                          "variant"
-                        >
-                    ) => <TextField {...params} fullWidth margin="normal" />}
-                  />
-                </div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+  {/* Start Time Picker */}
+  <TimePicker
+    label="Start Time"
+    value={formData.startTime}
+    onChange={(value: dayjs.Dayjs | null) =>
+      handleTimeChange("startTime", value)
+    }
+    slotProps={{ textField: { fullWidth: true, margin: "normal" } }}
+  />
+  
+  {/* End Time Picker */}
+  <TimePicker
+    label="End Time"
+    value={formData.endTime}
+    onChange={(value: dayjs.Dayjs | null) =>
+      handleTimeChange("endTime", value)
+    }
+    slotProps={{ textField: { fullWidth: true, margin: "normal" } }}
+  />
+</LocalizationProvider>
 
+                </div>
                 {/* Select Input */}
                 <FormControl fullWidth margin="normal">
                   <InputLabel>Workout</InputLabel>
                   <Select
                     name="workout"
                     value={formData.workout}
-                    onChange={handleChange}
+                    // onChange={handleChange}
                   >
                     <MenuItem value="FullBody">full body</MenuItem>
                     <MenuItem value="UpperBody">upper body</MenuItem>
