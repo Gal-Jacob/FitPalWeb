@@ -289,6 +289,20 @@ const PostsView: React.FC = () => {
   );
 };
 
+const ChatView: React.FC = () => {
+  return(
+    <Grid
+      container
+      spacing={2}
+      sx={{
+        width: 1200,
+        mx: "auto",
+        p: 2,
+      }}
+    />
+  )
+}
+
 const Profile: React.FC = () => {
   const navigate = useNavigate();
 
@@ -301,11 +315,11 @@ const Profile: React.FC = () => {
     whight: "100kg",
     photo: "",
   });
-  const [view, setView] = React.useState<"workout" | "posts">("workout");
+  const [view, setView] = React.useState<"workout" | "posts" | "chats">("workout");
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newView: "workout" | "posts"
+    newView: "workout" | "posts"  | "chats"
   ) => {
     setView(newView);
   };
@@ -359,9 +373,10 @@ const Profile: React.FC = () => {
       >
         <ToggleButton value="workout">Workout</ToggleButton>
         <ToggleButton value="posts">Posts</ToggleButton>
+        <ToggleButton value="chats">Chats</ToggleButton>
       </ToggleButtonGroup>
       <Container sx={{ height: "50vh" }}>
-        {view == "workout" ? <WorloutView /> : <PostsView />}
+        {view == "workout" ? <WorloutView /> : view=="posts" ? <PostsView /> : <ChatView/>}
       </Container>
       <NewPostButton />
     </div>

@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Messages from "./pages/Messages";
 import NewPost from "./pages/NewPost";
 import SignUp from "./pages/SignUp";
+import Chatpage from "./pages/chat";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -44,6 +45,7 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Messages" element={<Messages />} />
           <Route path="/NewPost" element={<NewPost />} />
+          <Route path="/Chats" element={<Chatpage/>} />
         </Routes>
       </ThemeProvider>
     </>
