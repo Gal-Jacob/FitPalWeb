@@ -1,7 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import connectDB from './utils/db';
-import router from './User/router';
+import router from './user/router';
 import setupSwagger from './utils/swagger';
 
 const app = express();
