@@ -1,5 +1,8 @@
 import { Router } from 'express';
+
+import passport from 'passport';
 import UserController from './controller';
+
 const router = Router();
 const userController = new UserController();
 
@@ -70,6 +73,10 @@ router.put('/profile', userController.updateUserProfile);
  *                 type: string
  *               password:
  *                 type: string
+ *               firstName:
+ *                 type: string
+ *               lastName: 
+ *                 type: string
  *     responses:
  *       201:
  *         description: User registered successfully
@@ -103,6 +110,7 @@ router.post('/register', userController.registerUser);
  */
 router.post('/login', userController.loginUser);
 
+
 /**
  * @swagger
  * /api/user/google:
@@ -115,6 +123,25 @@ router.post('/login', userController.loginUser);
  *       400:
  *         description: Bad request
  */
-router.get('/google', userController.googleAuth);
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+/**
+ * @swagger
+ * /api/user/google:
+ *   get:
+ *     summary: Authenticate with Google
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *       400:
+ *         description: Bad request
+ */
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    res.redirect('/');
+  }
+);
+
 
 export default router;

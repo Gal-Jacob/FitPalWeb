@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import connectDB from './utils/db';
 import router from './user/router';
+import passport from './utils/googlePassport';
 import setupSwagger from './utils/swagger';
 
 const app = express();
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDB();
+
+app.use(passport.initialize());
 
 setupSwagger(app);
 

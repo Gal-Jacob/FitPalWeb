@@ -60,19 +60,6 @@ class UserController {
             }
         }
     };
-
-    public googleAuth = async (req: Request, res: Response) => {
-        try {
-            const token = await this.userService.googleAuth(req.body);
-            res.status(200).json({ token });
-        } catch (error) {
-            if (error instanceof Error) {
-                res.status(400).json({ message: error.message });
-            } else {
-                res.status(400).json({ message: 'An unknown error occurred' });
-            }
-        }
-    };
 }
 
 export default UserController;

@@ -25,16 +25,8 @@ export class UserService {
         return jwt.sign(payload, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
     }
 
-    async googleAuth(googleId: string): Promise<IUser | null> {
-        const user = await User.findOne({ googleId });
-        if (user) {
-            return user;
-        }
-        return null;
-    }
-
     async register(userData: any): Promise<IUser> {
-        const { email, password } = userData;
+        const { email, password, firstName, lastName } = userData;
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -46,6 +38,8 @@ export class UserService {
         const user = new User({
             email,
             password: hashedPassword,
+            firstName,
+            lastName,
         });
 
         await user.save();
