@@ -1,11 +1,13 @@
 import express from 'express';
+import morgan from 'morgan';
 import connectDB from './utils/db';
-import authRoutes from './routes/authRoutes';
-import userRoutes from './routes/userRoutes';
+import router from './User/router';
 import setupSwagger from './utils/swagger';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -14,8 +16,7 @@ connectDB();
 
 setupSwagger(app);
 
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/user', router);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

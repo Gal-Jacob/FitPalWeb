@@ -23,6 +23,16 @@ const userSchema: Schema<IUser> = new Schema({
         type: String,
         unique: true,
     },
+    firstName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
 }, { timestamps: true });
 
 userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {

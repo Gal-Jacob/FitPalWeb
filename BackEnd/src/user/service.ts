@@ -1,8 +1,16 @@
-import User, { IUser } from '../models/userModel';
+import User, { IUser } from './model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-class AuthService {
+export class UserService {
+    async findUserById(userId: string) {
+        return await User.findById(userId).exec();
+    }
+
+    async updateUser(userId: string, updateData: Partial<IUser>) {
+        return await User.findByIdAndUpdate(userId, updateData, { new: true }).exec();
+    }
+
     async validateUser(email: string, password: string): Promise<IUser | null> {
         const user = await User.findOne({ email });
         if (user && await bcrypt.compare(password, user.password)) {
@@ -54,5 +62,3 @@ class AuthService {
         return this.generateToken(user);
     }
 }
-
-export default AuthService;

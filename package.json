@@ -7,11 +7,13 @@
     "@mui/material": "^6.4.5",
     "@mui/x-date-pickers": "^7.27.0",
     "dayjs": "^1.11.13",
+    "morgan": "^1.10.0",
     "react-router-dom": "^7.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@types/morgan": "^1.9.9",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8"
   }
