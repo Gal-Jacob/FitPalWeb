@@ -1,15 +1,13 @@
-import { useState } from "react";
 import "./App.css";
 import NavBar from "./components/Navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";
-import Login from "./pages/Login";
 import Messages from "./pages/Messages";
 import NewPost from "./pages/NewPost";
-import SignUp from "./pages/SignUp";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import AuthPages from "./pages/Auth";
 
 const theme = createTheme({
   palette: {
@@ -40,8 +38,8 @@ function App() {
           <Route path="/Home" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/EditProfile" element={<EditProfile />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/Login" element={<AuthPages  />} />
+          <Route path="/SignUp" element={<AuthPages  />} />
           <Route path="/Messages" element={<Messages />} />
           <Route path="/NewPost" element={<NewPost />} />
         </Routes>
