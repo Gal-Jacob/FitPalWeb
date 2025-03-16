@@ -39,7 +39,6 @@ function App() {
           <Route path="/Profile" element={<Profile />} />
           <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Login" element={<AuthPages  />} />
-          <Route path="/SignUp" element={<AuthPages  />} />
           <Route path="/Messages" element={<Messages />} />
           <Route path="/NewPost" element={<NewPost />} />
         </Routes>

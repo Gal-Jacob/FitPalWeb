@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
-import { Button, TextField, Container, Typography, Box, Card } from '@mui/material';
-import { AuthPagesProps } from './Auth';
-import { useNavigate } from 'react-router-dom';
+import { Button, TextField, Container, Typography, Card } from '@mui/material';
+import { AuthPagesProps, emailRegex, passwordSignUpRegex } from './Auth';
 
 const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const navigate = useNavigate();
+
+
+
+  const isDisabled =
+      firstName === '' ||
+      lastName === '' ||
+      !emailRegex.test(email) ||
+      !passwordSignUpRegex.test(password);
 
   const handleSignUp = () => {
-      navigate('/Login');
+      if (!isDisabled) {
+          onSwitchPage();
+      }
   };
 
   return (
       <Container maxWidth="sm">
-        <Card sx={{ p: 4, mt: 8 }}>
-          <Box sx={{ mt: 8 }}>
+          <Card sx={{ p: 4, mt: 8 }}>
               <Typography variant="h4" gutterBottom>Sign Up</Typography>
               <TextField 
                   label="First Name" 
@@ -39,6 +46,8 @@ const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
                   margin="normal" 
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)}
+                  error={!!email && !emailRegex.test(email)}
+                  helperText={!!email && !emailRegex.test(email) ? 'Invalid email format' : ''}
               />
               <TextField 
                   label="Password" 
@@ -47,11 +56,14 @@ const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
                   margin="normal" 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)}
+                  error={!!password && !passwordSignUpRegex.test(password)}
+                  helperText={!!password && !passwordSignUpRegex.test(password) ? 'Password must be at least 8 characters long and contain at least one letter and one number' : ''}
               />
               <Button 
                   variant="contained" 
                   fullWidth 
                   onClick={handleSignUp}
+                  disabled={isDisabled}
                   sx={{ mt: 2 }}
               >
                   Sign Up
@@ -64,7 +76,6 @@ const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
               >
                   Already have an account? Login
               </Button>
-          </Box>
           </Card>
       </Container>
   );

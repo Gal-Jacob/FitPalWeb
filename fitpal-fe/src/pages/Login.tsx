@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextField, Container, Typography, Box, Card } from '@mui/material';
-import { AuthPagesProps } from './Auth';
+import { AuthPagesProps, emailRegex, passwordLogInRegex } from './Auth';
 import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
@@ -8,7 +8,7 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
 
-  const isDisabled = email === '' || password === '';
+  const isDisabled = !emailRegex.test(email) || !passwordLogInRegex.test(password);
 
   const handleLogin = () => {
       if (!isDisabled) {
@@ -22,12 +22,13 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
           <Box sx={{ mt: 8 }}>
               <Typography variant="h2" gutterBottom>Welcome to FitPal</Typography>
               <TextField 
-                  sx={{mt: 16}}
-                  label="Email" 
-                  fullWidth 
-                  margin="normal" 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)}
+                label="Email" 
+                fullWidth 
+                margin="normal" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)}
+                error={!!email && !emailRegex.test(email)}
+                helperText={!!email && !emailRegex.test(email) ? 'Invalid email format' : ''}
               />
               <TextField 
                   label="Password" 
