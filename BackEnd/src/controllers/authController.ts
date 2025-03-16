@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/authService';
-import type { AuthServiceType } from '../services/authService';
 
 class AuthController {
-    private authService: AuthServiceType;
+    private authService: AuthService;
 
     constructor() {
         this.authService = new AuthService();
@@ -14,7 +13,11 @@ class AuthController {
             const user = await this.authService.register(req.body);
             res.status(201).json(user);
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            if (error instanceof Error) {
+                res.status(400).json({ message: error.message });
+            } else {
+                res.status(400).json({ message: 'An unknown error occurred' });
+            }
         }
     };
 
@@ -23,7 +26,11 @@ class AuthController {
             const token = await this.authService.login(req.body);
             res.status(200).json({ token });
         } catch (error) {
-            res.status(401).json({ message: error.message });
+            if (error instanceof Error) {
+                res.status(400).json({ message: error.message });
+            } else {
+                res.status(400).json({ message: 'An unknown error occurred' });
+            }
         }
     };
 
@@ -32,7 +39,11 @@ class AuthController {
             const token = await this.authService.googleAuth(req.body);
             res.status(200).json({ token });
         } catch (error) {
-            res.status(400).json({ message: error.message });
+            if (error instanceof Error) {
+                res.status(400).json({ message: error.message });
+            } else {
+                res.status(400).json({ message: 'An unknown error occurred' });
+            }
         }
     };
 }

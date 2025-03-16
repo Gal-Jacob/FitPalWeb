@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/yourdbname', {
+        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/FitPal', {
         });
         console.log('MongoDB connected successfully');
     } catch (error) {

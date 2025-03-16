@@ -23,6 +23,36 @@ class AuthService {
         }
         return null;
     }
+
+    async register(userData: any): Promise<IUser> {
+        const { email, password } = userData;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            throw new Error('User already exists');
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = new User({
+            email,
+            password: hashedPassword,
+        });
+
+        await user.save();
+        return user;
+    }
+
+    async login(userData: any): Promise<string> {
+        const { email, password } = userData;
+
+        const user = await this.validateUser(email, password);
+        if (!user) {
+            throw new Error('Invalid email or password');
+        }
+
+        return this.generateToken(user);
+    }
 }
 
 export default AuthService;
