@@ -2,11 +2,17 @@ import express from 'express';
 import morgan from 'morgan';
 import connectDB from './utils/db';
 import router from './user/router';
+import cors from 'cors';
 import passport from './utils/googlePassport';
 import setupSwagger from './utils/swagger';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+app.use(cors({
+    origin: 'http://localhost', 
+    credentials: true, 
+}));
 
 app.use(morgan('dev'));
 

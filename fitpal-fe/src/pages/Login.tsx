@@ -2,19 +2,37 @@ import React, { useState } from 'react';
 import { Button, TextField, Container, Typography, Box, Card } from '@mui/material';
 import { AuthPagesProps, emailRegex, passwordLogInRegex } from './Auth';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const isDisabled = !emailRegex.test(email) || !passwordLogInRegex.test(password);
 
-  const handleLogin = () => {
-      if (!isDisabled) {
-          navigate('/'); 
-      }
+  const handleLogin = async () => {
+    if (isDisabled) return;
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/user/login', {
+        email,
+        password,
+      }, {
+        withCredentials: true,
+    });
+
+      const { token } = response.data;
+
+      localStorage.setItem('token', token);
+
+      navigate('/');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed');
+    }
   };
+
 
   return (
       <Container maxWidth="sm">
