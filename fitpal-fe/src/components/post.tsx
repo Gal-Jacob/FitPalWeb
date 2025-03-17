@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
-  Button,
   Container,
   Card,
   CardContent,
@@ -11,11 +8,10 @@ import {
   IconButton,
   Avatar,
   Modal,
-  Grid2,
+  Grid2 as Grid,
   TextField,
 } from "@mui/material";
-import NewPostButton from "../components/newPostButton/NewPostButton";
-import { IComment, IPost, IPostCommentsModalProps } from "../types";
+import { IComment, IPostCommentsModalProps, IPostProps } from "../types";
 import {
   ThumbUpRounded,
   ChatBubbleOutlineRounded,
@@ -36,10 +32,6 @@ const style = {
   boxShadow: 24,
   // p: 4,
 };
-
-interface IPostProps {
-  props: IPost;
-}
 
 const TEMP_COMMENTS: IComment[] = [
   { owner: "Alice", text: "This is amazing!" },
@@ -97,8 +89,8 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
           <Container sx={{ overflowY: "auto", height: 240 }}>
             {comments?.map((comment, i) => {
               return (
-                <Grid2 container>
-                  <Grid2 size={1}>
+                <Grid container>
+                  <Grid size={1}>
                     <Avatar
                       sx={{
                         width: 25,
@@ -110,20 +102,20 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
                         sx={{ width: 20, height: 20, color: "#4343f054" }}
                       />{" "}
                     </Avatar>
-                  </Grid2>
-                  <Grid2 size={10}>
+                  </Grid>
+                  <Grid size={10}>
                     <Typography
                       key={i}
                       id="modal-modal-title"
                       variant="body1"
                       component="h2"
-                      sx={{ marginBottom: 1.25 }}
+                      sx={{ marginBottom: 1.25, color: "black" }}
                     >
                       <b>{comment.owner}</b>
                       {comment.text}
                     </Typography>
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
               );
             })}
           </Container>
@@ -140,11 +132,11 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
               sx={{ width: "100%" }}
               label="add comment"
               variant="outlined"
-              fullwidth
+              fullWidth
               value={addComment}
               onChange={handleOnChangeComment}
             />
-            <IconButton variant="contained" color="secondary">
+            <IconButton color="secondary">
               <Send />
             </IconButton>
           </div>

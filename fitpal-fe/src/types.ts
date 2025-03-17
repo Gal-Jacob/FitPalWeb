@@ -19,6 +19,10 @@ export interface IPost {
   details: string;
 }
 
+export interface IPostProps {
+  props: IPost;
+}
+
 export interface IProfile {
   id: string;
   name: string;

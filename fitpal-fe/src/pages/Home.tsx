@@ -1,6 +1,6 @@
 import NewPostButton from "../components/newPostButton/NewPostButton";
-import { IPost } from "../types";
 import Post from "../components/post";
+import { IPost } from "../types";
 
 const temp: IPost[] = [
   {
