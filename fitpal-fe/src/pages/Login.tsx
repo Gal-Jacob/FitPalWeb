@@ -33,6 +33,11 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:5000/api/user/google';
+  };
+
+
 
   return (
       <Container maxWidth="sm">
@@ -75,12 +80,13 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
               Don't have an account? Sign Up
           </Button>
           <Typography sx={{mt: 4}} variant="h4" gutterBottom>OR</Typography>
-          <Button 
-              variant="outlined" 
-              fullWidth 
-              sx={{ mt: 2 }}
+          <Button
+          variant="outlined"
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={handleGoogleLogin}
           >
-              Continue with Google
+          Continue with Google
           </Button>
 
         </Card>
