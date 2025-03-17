@@ -18,7 +18,11 @@ import {
   InsertPhoto,
   Person,
   Send,
+  Close,
 } from "@mui/icons-material";
+
+import "./components.css";
+import CustomIconButton from "./CustomIconButton";
 
 const style = {
   position: "absolute",
@@ -77,15 +81,25 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
     <Modal open={isOpen} onClose={closeModal}>
       <Box sx={style}>
         <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-          <Typography
-            variant="h5"
-            sx={{
-              marginBottom: 0,
-              padding: "20px 20px 0px 20px",
-            }}
-          >
-            Comments
-          </Typography>
+          <div className="modal-header">
+            <Typography
+              variant="h5"
+              sx={{
+                marginBottom: 0,
+                paddingBottom: "0px 20px 0px 20px",
+                color: "black",
+              }}
+            >
+              Comments
+            </Typography>
+            <CustomIconButton
+              color="primary"
+              aria-label="close"
+              onClick={() => closeModal()}
+            >
+              <Close />
+            </CustomIconButton>
+          </div>
           <Container sx={{ overflowY: "auto", height: 240 }}>
             {comments?.map((comment, i) => {
               return (
@@ -100,18 +114,19 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
                     >
                       <Person
                         sx={{ width: 20, height: 20, color: "#4343f054" }}
-                      />{" "}
+                      />
                     </Avatar>
                   </Grid>
-                  <Grid size={10}>
+                  <Grid size={10} sx={{ color: "black" }}>
                     <Typography
                       key={i}
                       id="modal-modal-title"
                       variant="body1"
                       component="h2"
-                      sx={{ marginBottom: 1.25, color: "black" }}
                     >
                       <b>{comment.owner}</b>
+                    </Typography>
+                    <Typography sx={{ marginBottom: 1.25 }}>
                       {comment.text}
                     </Typography>
                   </Grid>
@@ -199,16 +214,16 @@ const Post: React.FC<IPostProps> = ({ props }) => {
                 padding: 0,
               }}
             >
-              <IconButton color="primary" aria-label="like">
+              <CustomIconButton color="primary" aria-label="like">
                 <ThumbUpRounded />
-              </IconButton>
-              <IconButton
+              </CustomIconButton>
+              <CustomIconButton
                 color="primary"
                 aria-label="comment"
                 onClick={handleOpenCommentModal}
               >
                 <ChatBubbleOutlineRounded />
-              </IconButton>
+              </CustomIconButton>
             </Box>
           </CardContent>
         </Card>
