@@ -1,15 +1,6 @@
-import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Container,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Typography, Container, Card, CardContent } from "@mui/material";
 
-export default function Login() {
+const Login = () => {
   return (
     <div>
       <Container sx={{ mt: 4 }}>
@@ -23,4 +14,6 @@ export default function Login() {
       </Container>
     </div>
   );
-}
+};
+
+export default Login;

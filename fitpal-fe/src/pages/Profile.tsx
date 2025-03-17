@@ -1,7 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Container,
@@ -11,6 +10,7 @@ import {
   IconButton,
   FormControl,
   InputLabel,
+  Grid2 as Grid,
   Select,
   MenuItem,
   TableContainer,
@@ -23,19 +23,18 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import { useNavigate } from "react-router-dom";
-import { IProfile, IExercise, IGuideline, ISchedule, IPost } from "../types";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import EditIcon from "@mui/icons-material/Edit";
+import { InsertPhoto, Edit } from "@mui/icons-material";
+import {
+  IProfile,
+  IExercise,
+  IGuideline,
+  ISchedule,
+  IPost,
+  IWorkoutPlan,
+} from "../types";
 import NewPostButton from "../components/newPostButton/NewPostButton";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-interface IWorkoutPlane {
-  exercises: IExercise[];
-}
-
-const WorkoutPlane: React.FC<IWorkoutPlane> = ({ exercises }) => {
+const WorkoutPlan: React.FC<IWorkoutPlan> = ({ exercises }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -149,7 +148,7 @@ const WorloutView: React.FC = () => {
                 <Button variant="contained">New Workout</Button>
               </Grid>
               <Grid size={12} id="workout-details">
-                <WorkoutPlane exercises={exercises} />
+                <WorkoutPlan exercises={exercises} />
               </Grid>
             </Grid>
           </CardContent>
@@ -254,9 +253,7 @@ const PostsView: React.FC = () => {
                   }}
                 >
                   {post.photo}
-                  <InsertPhotoIcon
-                    sx={{ width: 80, height: 80, color: "white" }}
-                  />
+                  <InsertPhoto sx={{ width: 80, height: 80, color: "white" }} />
                 </Avatar>
                 <Grid container>
                   <Grid size={12}>
@@ -338,7 +335,7 @@ const Profile: React.FC = () => {
           {userProfile.photo ? (
             userProfile.photo
           ) : (
-            <InsertPhotoIcon sx={{ width: 80, height: 80, color: "white" }} />
+            <InsertPhoto sx={{ width: 80, height: 80, color: "white" }} />
           )}
         </Avatar>
         <Typography variant="h5">{userProfile.name}</Typography>
@@ -347,7 +344,7 @@ const Profile: React.FC = () => {
           aria-label="like"
           onClick={handleOnClickEditProfile}
         >
-          <EditIcon />
+          <Edit />
         </IconButton>
       </Container>
       <ToggleButtonGroup
