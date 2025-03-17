@@ -55,6 +55,7 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
               value={password} 
               onChange={(e) => setPassword(e.target.value)}
           />
+          {error && <Typography color="error">{error}</Typography>}
           <Button 
               variant="contained" 
               fullWidth 
