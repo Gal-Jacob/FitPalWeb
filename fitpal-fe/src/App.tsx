@@ -1,7 +1,6 @@
-import { useState } from "react";
 import "./App.css";
 import NavBar from "./components/Navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import EditProfile from "./pages/EditProfile";
 import Profile from "./pages/Profile";

@@ -15,12 +15,14 @@ import {
   TextField,
 } from "@mui/material";
 import NewPostButton from "../components/newPostButton/NewPostButton";
-import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
-import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { IComment, IPost, IPostCommentsModalProps } from "../types";
-import PersonIcon from "@mui/icons-material/Person";
-import SendIcon from "@mui/icons-material/Send";
+import {
+  ThumbUpRounded,
+  ChatBubbleOutlineRounded,
+  InsertPhoto,
+  Person,
+  Send,
+} from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -104,7 +106,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
                         backgroundColor: "#4343f054",
                       }}
                     >
-                      <PersonIcon
+                      <Person
                         sx={{ width: 20, height: 20, color: "#4343f054" }}
                       />{" "}
                     </Avatar>
@@ -143,7 +145,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
               onChange={handleOnChangeComment}
             />
             <IconButton variant="contained" color="secondary">
-              <SendIcon />
+              <Send />
             </IconButton>
           </div>
         </div>
@@ -174,7 +176,7 @@ const Post: React.FC<IPostProps> = ({ props }) => {
               }}
             >
               {props.photo}
-              <InsertPhotoIcon sx={{ width: 80, height: 80, color: "white" }} />
+              <InsertPhoto sx={{ width: 80, height: 80, color: "white" }} />
             </Avatar>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
               {props.title}
@@ -206,14 +208,14 @@ const Post: React.FC<IPostProps> = ({ props }) => {
               }}
             >
               <IconButton color="primary" aria-label="like">
-                <ThumbUpRoundedIcon />
+                <ThumbUpRounded />
               </IconButton>
               <IconButton
                 color="primary"
                 aria-label="comment"
                 onClick={handleOpenCommentModal}
               >
-                <ChatBubbleOutlineRoundedIcon />
+                <ChatBubbleOutlineRounded />
               </IconButton>
             </Box>
           </CardContent>
