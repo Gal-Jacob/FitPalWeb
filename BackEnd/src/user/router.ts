@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import passport from 'passport';
 import UserController from './controller';
+import authMiddleware from './middleware';
 
 const router = Router();
 const userController = new UserController();
@@ -12,22 +13,15 @@ const userController = new UserController();
  *   get:
  *     summary: Get user profile
  *     tags: [User]
- *     parameters:
- *       - in: query
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *         description: The user ID
+ *     security:
+ *       - BearerAuth: [] 
  *     responses:
  *       200:
  *         description: User profile retrieved successfully
- *       400:
- *         description: Bad request
- *       404:
- *         description: User not found
+ *       401:
+ *         description: Unauthorized
  */
-router.get('/profile', userController.getUserProfile);
+router.get('/profile', authMiddleware, userController.getUserProfile);
 
 /**
  * @swagger
@@ -35,6 +29,8 @@ router.get('/profile', userController.getUserProfile);
  *   put:
  *     summary: Update user profile
  *     tags: [User]
+ *     security:
+ *       - BearerAuth: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -49,12 +45,10 @@ router.get('/profile', userController.getUserProfile);
  *     responses:
  *       200:
  *         description: User profile updated successfully
- *       400:
- *         description: Bad request
- *       404:
- *         description: User not found
+ *       401:
+ *         description: Unauthorized
  */
-router.put('/profile', userController.updateUserProfile);
+router.put('/profile', authMiddleware, userController.updateUserProfile);
 
 /**
  * @swagger

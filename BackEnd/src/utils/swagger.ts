@@ -16,6 +16,20 @@ const options = {
         url: process.env.BACKEND_URL || 'http://localhost:5000',
       },
     ],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT', 
+        },
+      },
+    },
+    security: [
+      {
+        BearerAuth: [], 
+      },
+    ],
   },
   apis: ['./src/user/*.ts'],
 };

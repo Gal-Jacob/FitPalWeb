@@ -22,7 +22,7 @@ export class UserService {
 
     generateToken(user: IUser): string {
         const payload = { id: user._id, email: user.email };
-        return jwt.sign(payload, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
+        return jwt.sign(payload, process.env.JWT_SECRET || '', { expiresIn: '1h' });
     }
 
     async register(userData: any): Promise<IUser> {
