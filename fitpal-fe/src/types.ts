@@ -3,7 +3,7 @@ export interface IComment {
   text: string;
 }
 
-export interface IPostCommentsModalProps {
+export interface ICommentsModalProps {
   postId: string;
   isOpen: boolean;
   closeModal: (event: {}, reason: "backdropClick" | "escapeKeyDown") => void;
