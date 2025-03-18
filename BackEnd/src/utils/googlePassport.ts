@@ -3,8 +3,8 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../user/model';
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID || 'your-google-client-id',
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'your-google-client-secret',
+    clientID: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     callbackURL: '/api/user/google/callback'
   },
   async (accessToken, refreshToken, profile, done) => {

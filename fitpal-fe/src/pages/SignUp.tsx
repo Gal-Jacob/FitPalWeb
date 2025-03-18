@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, TextField, Container, Typography, Card } from '@mui/material';
 import { AuthPagesProps, emailRegex, passwordSignUpRegex } from './Auth';
 import axios from 'axios';
+import { BACKEND_URL } from '../App';
 
 const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
     const [firstName, setFirstName] = useState<string>('');
@@ -20,7 +21,7 @@ const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
       if (isDisabled) return;
   
       try {
-        const response = await axios.post('http://localhost:5000/api/user/register', {
+        const response = await axios.post(`${BACKEND_URL}/api/user/register`, {
           firstName,
           lastName,
           email,
