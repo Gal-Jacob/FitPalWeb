@@ -3,6 +3,7 @@ import { Button, TextField, Container, Typography, Box, Card } from '@mui/materi
 import { AuthPagesProps, emailRegex, passwordLogInRegex } from './Auth';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { BACKEND_URL } from '../App';
 
 const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const [email, setEmail] = useState<string>('');
@@ -16,7 +17,7 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
     if (isDisabled) return;
 
     try {
-      const response = await axios.post('http://localhost:5000/api/user/login', {
+      const response = await axios.post(`${BACKEND_URL}/api/user/login`, {
         email,
         password,
       }, {
@@ -34,7 +35,7 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:5000/api/user/google';
+    window.location.href = `${BACKEND_URL}/api/user/google`;
   };
 
 

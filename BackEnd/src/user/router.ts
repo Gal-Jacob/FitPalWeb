@@ -138,9 +138,16 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  *         description: Bad request
  */
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/');
+(req, res) => {
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost';
+  const token = req.user ? (req.user as any).accessToken : null; 
+
+  if (token) {
+    res.redirect(`${frontendUrl}?token=${token}`);
+  } else {
+    res.redirect(frontendUrl);
   }
+}
 );
 
 
