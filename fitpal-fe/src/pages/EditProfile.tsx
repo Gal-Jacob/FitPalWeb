@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Typography,
@@ -9,14 +9,19 @@ import {
   Avatar,
   InputAdornment,
   Grid2 as Grid,
+  IconButton,
 } from "@mui/material";
-import { Person } from "@mui/icons-material";
+import { Edit, Person, Save } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import api from "../Api";
+import { BACKEND_URL } from "../config";
 
 interface FormState {
   height: string;
   weight: string;
+  firstName: string;
+  lastName: string;
 }
 
 const EditProfile = () => {
@@ -26,9 +31,37 @@ const EditProfile = () => {
   const [formData, setFormData] = useState<FormState>({
     height: "",
     weight: "",
+    firstName: "",
+    lastName: "",
   });
+  const [isEditingName, setIsEditingName] = useState<boolean>(false);
 
-  // Handle image selection
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token"); 
+        const response = await api.get(`${BACKEND_URL}/api/user/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+  
+        
+        setFormData({
+          height: response.data.height || "",
+          weight: response.data.weight || "",
+          firstName: response.data.firstName || "",
+          lastName: response.data.lastName || "",
+        });
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        alert("Failed to fetch profile. Please try again.");
+      }
+    };
+  
+    fetchProfile();
+  }, []);
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -37,23 +70,51 @@ const EditProfile = () => {
     }
   };
 
-  // Handle select and text field changes
   const handleChange = (
     event: React.ChangeEvent<{ value: unknown } | HTMLInputElement>
   ) => {
     const { name, value } = event.target as HTMLInputElement;
-    console.log({ name, value });
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log({
       height: formData.height,
       weight: formData.weight,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
     });
     alert("Form Submitted!");
+  };
+
+  const handleSaveOrEdit = async () => {
+    if (isEditingName) {
+      
+      try {
+        const token = localStorage.getItem("token"); 
+        await api.patch(
+          `${BACKEND_URL}/api/user/profile`,
+          {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, 
+            },
+          }
+        );
+        alert("Profile updated successfully!");
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+    }
+    toggleEditName(); 
+  };
+
+  const toggleEditName = () => {
+    setIsEditingName((prev) => !prev);
   };
 
   return (
@@ -113,7 +174,47 @@ const EditProfile = () => {
                     </Button>
                   </label>
                 </div>
-                <Typography variant="h5">Gal Yaakov</Typography>
+
+                {/* Editable Name Fields */}
+                <div style={{ 
+                  display: "flex",
+                  justifyContent: 'center', 
+                  alignItems: 'center',
+                  gap: "10px" 
+                  }}>
+                  {isEditingName ? (
+                    <>
+                      <TextField
+                        name="firstName"
+                        label="First Name"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                      />
+                      <TextField
+                        name="lastName"
+                        label="Last Name"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        fullWidth
+                        margin="normal"
+                      />
+                    </>
+                  ) : (
+                    <Typography variant="h5">
+                      {formData.firstName} {formData.lastName}
+                    </Typography>
+                  )}
+                  <IconButton
+                    color="primary"
+                    onClick={handleSaveOrEdit}
+                    disableRipple
+                    disableFocusRipple
+                  >
+                    {isEditingName ? <Save /> : <Edit />}
+                  </IconButton>
+                </div>
 
                 <Grid container spacing={2}>
                   <Grid size={6}>

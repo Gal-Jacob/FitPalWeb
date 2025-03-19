@@ -23,6 +23,7 @@ class UserController {
             return res.status(500).json({ message: 'Server error', error });
         }
     }
+
     public updateUserProfile = async (req: Request, res: Response) => {
         try {
             const userId = (req as any).user.id; 
@@ -39,6 +40,29 @@ class UserController {
             return res.status(500).json({ message: 'Server error', error });
         }
     };
+
+    public patchUserProfile = async (req: Request, res: Response) => {
+    try {
+        const userEmail = (req as any).user.email; 
+        const { firstName, lastName, height, weight } = req.body;
+
+        const updatedData: any = {};
+        if (firstName !== undefined) updatedData.firstName = firstName;
+        if (lastName !== undefined) updatedData.lastName = lastName;
+        if (height !== undefined) updatedData.height = height;
+        if (weight !== undefined) updatedData.weight = weight;
+
+        const updatedUser = await this.userService.updateUserByEmail(userEmail, updatedData);
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json(updatedUser);
+    } catch (error) {
+        return res.status(500).json({ message: 'Server error', error });
+    }
+};
 
     public registerUser = async (req: Request, res: Response) => {
         try {

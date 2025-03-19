@@ -22,7 +22,8 @@ export const BACKEND_URL = `http://localhost:${PORT}`
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3001",
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   })
 );
@@ -41,19 +42,9 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 connectDB();
 
-app.use(passport.initialize());
-
-app.use(expressSession({
-    secret: process.env.SESSION_SECRET || 'your-secret-key', 
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
-}));
 
 app.use(passport.initialize());
 app.use(passport.session());

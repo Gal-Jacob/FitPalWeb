@@ -11,6 +11,8 @@ export interface IUser extends Document {
     refreshToken?: string;
     lastWorkoutGenerated?: Date;
     workout?: object;
+    height?: number;
+    weight?: number;
     comparePassword: (password: string) => Promise<boolean>;
 }
 
@@ -47,12 +49,17 @@ const userSchema: Schema<IUser> = new Schema(
       trim: true,
     },
     lastWorkoutGenerated: {
-
-        type: Date,
+      type: Date,
     },
     workout: { 
-        type: Object,
-    }
+      type: Object,
+    },
+    height: {
+      type: Number,
+    },
+    weight: {
+      type: Number,
+  }
 
 }, { timestamps: true });
 

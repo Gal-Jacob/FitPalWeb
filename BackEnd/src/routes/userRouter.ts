@@ -52,6 +52,58 @@ userRouter.put('/profile', authMiddleware, userController.updateUserProfile);
 
 /**
  * @swagger
+ * /api/user/profile:
+ *   patch:
+ *     summary: Partially update user profile
+ *     tags: [User]
+ *     security:
+ *       - BearerAuth: [] 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The user's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name
+ *               height:
+ *                 type: integer
+ *                 description: The user's height in cm
+ *               weight:
+ *                 type: integer
+ *                 description: The user's weight in kg
+ *     responses:
+ *       200:
+ *         description: User profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 firstName:
+ *                   type: string
+ *                 lastName:
+ *                   type: string
+ *                 height:
+ *                   type: integer
+ *                 weight:
+ *                   type: integer
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+userRouter.patch('/profile', authMiddleware, userController.patchUserProfile);
+
+/**
+ * @swagger
  * /api/user/register:
  *   post:
  *     summary: Register a new user
