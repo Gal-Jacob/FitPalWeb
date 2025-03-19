@@ -39,7 +39,7 @@ interface FormState {
 export default function NewPost() {
   const navigate = useNavigate();
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null | File>(null);
   const [formData, setFormData] = useState<FormState>({
     startTime: null,
     endTime: null,
@@ -49,10 +49,18 @@ export default function NewPost() {
 
   // Handle image selection
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create a preview URL
-      setSelectedImage(imageUrl);
+    const fileInput = event.target.files;
+
+    if (fileInput && fileInput[0]) {
+      const file = fileInput[0]; // Get the first file selected
+      // setImage(file); // Set base64 image preview
+
+      // Optionally, preview the image (for visual feedback)
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string); // Set base64 image preview
+      };
+      reader.readAsDataURL(file); // Read the file as data URL (for preview)
     }
   };
 
@@ -77,20 +85,22 @@ export default function NewPost() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const postData = {
-      author: "Gal Yaakov", //TODO: replace with the user that loged in
-      startTime: formData.startTime ? formData.startTime.format() : null,
-      endTime: formData.endTime ? formData.endTime.format() : null,
-      workout: formData.workout,
-      details: formData.details,
-      imageUrl: "image",
-    };
+    if (!formData.startTime || !formData.endTime || !image) {
+      return;
+    }
+
+    const form = new FormData();
+    form.append("author", "Gal Yaakov"); // TODO: Replace with logged-in user's name
+    form.append("startTime", formData.startTime.format());
+    form.append("endTime", formData.endTime.format());
+    form.append("workout", formData.workout);
+    form.append("details", formData.details);
+    form.append("image", image);
 
     axios
-      .post("http://localhost:5000/api/post/add", postData, {
+      .post("http://localhost:5000/api/post/add", form, {
         headers: {
-          "Content-Type": "application/json",
-          accept: "*/*",
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
@@ -134,11 +144,8 @@ export default function NewPost() {
                     alignItems: "center",
                   }}
                 >
-                  {selectedImage ? (
-                    <Avatar
-                      src={selectedImage}
-                      sx={{ width: 150, height: 150 }}
-                    />
+                  {image ? (
+                    <Avatar src={image} sx={{ width: 150, height: 150 }} />
                   ) : (
                     <Avatar
                       sx={{ width: 150, height: 150, backgroundColor: "white" }}

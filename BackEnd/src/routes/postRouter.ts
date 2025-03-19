@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import PostController from '../controllers/postController';
 import authMiddleware from '../utils/authMiddleware';
+import multerUpload from '../utils/multerFilesUpload'; // Import Multer configuration
 
 const postRouter = Router();
 const postController = new PostController();
@@ -78,7 +79,7 @@ postRouter.get('/all', postController.getAllPosts);
  *       400:
  *         description: Bad request
  */
-postRouter.post('/add', postController.addNewPost);
+postRouter.post('/add', multerUpload.single('image'), postController.addNewPost);
 // postRouter.post('/add', authMiddleware, postController.addNewPost);
 
 export default postRouter;

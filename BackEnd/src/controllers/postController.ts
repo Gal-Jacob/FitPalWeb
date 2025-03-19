@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PostService } from '../services/postService';
+import { BACKEND_URL } from '../app';
 
 class PostController {
     private postService: PostService;
@@ -33,9 +34,15 @@ class PostController {
     };
 
     public addNewPost = async (req: Request, res: Response) => {
-        try {
-            console.log(req.body)
-            await this.postService.addPost(req.body);
+        try {            
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+              }
+
+            let data = req.body
+            data.imageUrl = `${BACKEND_URL}/${req.file.path.replace(/\\/g, '/')}`
+
+            await this.postService.addPost(data);
             return res.status(201).json({'message': 'Post added successfully'});
         } catch (error) {
 
