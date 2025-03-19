@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
+import { BACKEND_URL } from '../app';
 
 class UserController {
     private userService: UserService;
@@ -42,27 +43,52 @@ class UserController {
     };
 
     public patchUserProfile = async (req: Request, res: Response) => {
-    try {
+        try {
+            const userEmail = (req as any).user.email; 
+            const { firstName, lastName, height, weight} = req.body;
+
+            const updatedData: any = {};
+            if (firstName !== undefined) updatedData.firstName = firstName;
+            if (lastName !== undefined) updatedData.lastName = lastName;
+            if (height !== undefined) updatedData.height = height;
+            if (weight !== undefined) updatedData.weight = weight;
+
+            const updatedUser = await this.userService.updateUserByEmail(userEmail, updatedData);
+
+            if (!updatedUser) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            return res.status(200).json(updatedUser);
+        } catch (error) {
+            return res.status(500).json({ message: 'Server error', error });
+        }
+    };
+
+    public patchUserPhoto = async (req: Request | any, res: Response) => {
         const userEmail = (req as any).user.email; 
-        const { firstName, lastName, height, weight } = req.body;
+        const image = req.image; 
 
-        const updatedData: any = {};
-        if (firstName !== undefined) updatedData.firstName = firstName;
-        if (lastName !== undefined) updatedData.lastName = lastName;
-        if (height !== undefined) updatedData.height = height;
-        if (weight !== undefined) updatedData.weight = weight;
-
-        const updatedUser = await this.userService.updateUserByEmail(userEmail, updatedData);
-
-        if (!updatedUser) {
-            return res.status(404).json({ message: 'User not found' });
+        if (!image) {
+            return res.status(400).json({ message: 'No photo uploaded' });
         }
 
-        return res.status(200).json(updatedUser);
-    } catch (error) {
-        return res.status(500).json({ message: 'Server error', error });
-    }
-};
+        const updatedData: any = {};
+        updatedData.image = `${BACKEND_URL}/${image.path.replace(/\\/g, '/')}`;
+
+        try {
+            const updatedUser = await this.userService.updateUserByEmail(userEmail, updatedData);
+
+            if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+            }
+
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            res.status(500).json({ message: 'Server error', error });
+        }
+    };
+
 
     public registerUser = async (req: Request, res: Response) => {
         try {
@@ -97,6 +123,7 @@ class UserController {
             }
         }
     };
+
 }
 
 export default UserController;

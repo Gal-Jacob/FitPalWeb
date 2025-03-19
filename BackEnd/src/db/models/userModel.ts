@@ -13,6 +13,7 @@ export interface IUser extends Document {
     workout?: object;
     height?: number;
     weight?: number;
+    image?: string;
     comparePassword: (password: string) => Promise<boolean>;
 }
 
@@ -59,7 +60,10 @@ const userSchema: Schema<IUser> = new Schema(
     },
     weight: {
       type: Number,
-  }
+    },
+    image: {
+      type: String,
+    }
 
 }, { timestamps: true });
 

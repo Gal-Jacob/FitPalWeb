@@ -22,6 +22,7 @@ interface FormState {
   weight: string;
   firstName: string;
   lastName: string;
+  photo: string | null;
 }
 
 const EditProfile = () => {
@@ -33,40 +34,56 @@ const EditProfile = () => {
     weight: "",
     firstName: "",
     lastName: "",
+    photo: null,
   });
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
+  const [image, setImage] = useState<string | null | File>(null);
+  const [imagePreview, setImagePreview] = useState<string | null | File>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem("token"); 
+        const token = localStorage.getItem("token");
         const response = await api.get(`${BACKEND_URL}/api/user/profile`, {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         });
-  
-        
+
         setFormData({
           height: response.data.height || "",
           weight: response.data.weight || "",
           firstName: response.data.firstName || "",
           lastName: response.data.lastName || "",
+          photo: response.data.photo || null,
         });
+        setSelectedImage(response.data.photo || null); // Set the current photo
       } catch (error) {
         console.error("Error fetching profile:", error);
         alert("Failed to fetch profile. Please try again.");
       }
     };
-  
+
     fetchProfile();
   }, []);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); 
-      setSelectedImage(imageUrl);
+    const fileInput = event.target.files;
+  
+    if (fileInput && fileInput[0]) {
+      const file = fileInput[0];
+      console.log("Selected file:", file); // Debugging
+      setImage(file);
+  
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        console.log("FileReader result:", reader.result); // Debugging
+        setImagePreview(reader.result as string);
+      };
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -93,7 +110,7 @@ const EditProfile = () => {
           },
         }
       );
-      navigate("/profile");
+      navigate("/profile")
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -109,6 +126,7 @@ const EditProfile = () => {
           {
             firstName: formData.firstName,
             lastName: formData.lastName,
+            image: image,
           },
           {
             headers: {
@@ -150,7 +168,7 @@ const EditProfile = () => {
                 >
                   {selectedImage ? (
                     <Avatar
-                      src={selectedImage}
+                      src={imagePreview}
                       sx={{ width: 150, height: 150 }}
                     />
                   ) : (

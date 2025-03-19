@@ -3,6 +3,7 @@ import { Router } from 'express';
 import passport from 'passport';
 import UserController from '../controllers/userController';
 import authMiddleware from '../utils/authMiddleware';
+import multerUpload from '../utils/multerFilesUpload';
 
 const userRouter = Router();
 const userController = new UserController();
@@ -101,6 +102,45 @@ userRouter.put('/profile', authMiddleware, userController.updateUserProfile);
  *         description: User not found
  */
 userRouter.patch('/profile', authMiddleware, userController.patchUserProfile);
+
+/**
+ * @swagger
+ * /api/user/profile/photo:
+ *   patch:
+ *     summary: Update user profile photo
+ *     tags: [User]
+ *     security:
+ *       - BearerAuth: [] 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *                 description: The photo file to upload
+ *     responses:
+ *       200:
+ *         description: User profile photo updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 photo:
+ *                   type: string
+ *                   description: The URL or path of the updated photo
+ *       400:
+ *         description: No photo uploaded
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+userRouter.patch('/profile/photo', authMiddleware, multerUpload.single('image'), userController.patchUserPhoto);
 
 /**
  * @swagger
