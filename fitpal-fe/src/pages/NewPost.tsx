@@ -25,9 +25,9 @@ import dayjs, { Dayjs } from "dayjs";
 import { JSX } from "react/jsx-runtime";
 import { useNavigate } from "react-router-dom";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { error } from "console";
+import api from "../Api";
 
 interface FormState {
   startTime: Dayjs | null;
@@ -98,7 +98,7 @@ export default function NewPost() {
     form.append("details", formData.details);
     form.append("image", image);
 
-    axios
+    api
       .post("http://localhost:5000/api/post/add", form, {
         headers: {
           "Content-Type": "multipart/form-data",

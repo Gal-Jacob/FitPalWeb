@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { AuthPagesProps, emailRegex, passwordLogInRegex } from "./Auth";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BACKEND_URL } from "../config";
+import { BACKEND_URL, TOKEN_LS } from "../config";
+import api from "../Api";
 
 const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const [email, setEmail] = useState<string>("");
@@ -24,8 +24,8 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const handleLogin = async () => {
     if (isDisabled) return;
 
-    try {
-      const response = await axios.post(
+    await api
+      .post(
         `${BACKEND_URL}/api/user/login`,
         {
           email,
@@ -34,16 +34,15 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
         {
           withCredentials: true,
         }
-      );
-
-      const { token } = response.data;
-
-      localStorage.setItem("token", token);
-
-      navigate("/");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Login failed");
-    }
+      )
+      .then((res) => {
+        const { token } = res.data;
+        localStorage.setItem(TOKEN_LS, token);
+        navigate("/");
+      })
+      .catch((error) => {
+        setError(error.response?.data?.message || "Login failed");
+      });
   };
 
   const handleGoogleLogin = () => {

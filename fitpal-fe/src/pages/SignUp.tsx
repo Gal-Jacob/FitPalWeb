@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Button, TextField, Container, Typography, Card } from "@mui/material";
 import { AuthPagesProps, emailRegex, passwordSignUpRegex } from "./Auth";
-import axios from "axios";
 import { BACKEND_URL } from "../config";
+import api from "../Api";
+import Swal from "sweetalert2";
 
 const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const [firstName, setFirstName] = useState<string>("");
@@ -20,20 +21,34 @@ const SignUp: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
   const handleSignUp = async () => {
     if (isDisabled) return;
 
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/user/register`, {
+    api
+      .post(`${BACKEND_URL}/api/user/register`, {
         firstName,
         lastName,
         email,
         password,
+      })
+      .then((response) => {
+        Swal.fire({
+          title: "Signup successful!",
+          text: "You have successfully sign up!",
+          icon: "success",
+          confirmButtonText: "Okay",
+        }).then(() => {
+          onSwitchPage();
+        });
+      })
+      .catch((error) => {
+        setError(error.response?.data?.message || "Signup failed");
+        Swal.fire({
+          title: "Signup failed!",
+          text: `Something went wrong. ${
+            error.response?.data?.message || "Signup failed"
+          }`,
+          icon: "error",
+          confirmButtonText: "Close",
+        });
       });
-
-      console.log("Signup successful:", response.data);
-
-      onSwitchPage();
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Signup failed");
-    }
   };
 
   return (

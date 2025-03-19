@@ -28,8 +28,8 @@ const postController = new PostController();
  *       401:
  *         description: Unauthorized
  */
-postRouter.get('/user', postController.getUserPosts);
-// postRouter.get('/user', authMiddleware, postController.getUserPosts);
+// postRouter.get('/user', postController.getUserPosts);
+postRouter.get('/user', authMiddleware, postController.getUserPosts);
 
 /**
  * @swagger
@@ -45,8 +45,8 @@ postRouter.get('/user', postController.getUserPosts);
  *       401:
  *         description: Unauthorized
  */
-postRouter.get('/all', postController.getAllPosts);
-// postRouter.get('/all', authMiddleware, postController.getAllPosts);
+// postRouter.get('/all', postController.getAllPosts);
+postRouter.get('/all', authMiddleware, postController.getAllPosts);
 
 /**
  * @swagger
@@ -79,7 +79,55 @@ postRouter.get('/all', postController.getAllPosts);
  *       400:
  *         description: Bad request
  */
-postRouter.post('/add', multerUpload.single('image'), postController.addNewPost);
-// postRouter.post('/add', authMiddleware, postController.addNewPost);
+postRouter.post('/add',authMiddleware, multerUpload.single('image'), postController.addNewPost);
+
+
+/**
+ * @swagger
+ * /api/post/like:
+ *   get:
+ *     summary: Get all posts (optionally filter by user)
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: get post by postId
+ *     responses:
+ *       200:
+ *         description: Get post likes successfully
+ *       401:
+ *         description: Unauthorized
+ */
+// postRouter.get('/like', postController.getPostsLikes);
+postRouter.get('/like', authMiddleware, postController.getPostsLikes);
+
+/**
+ * @swagger
+ * /api/post/like:
+ *   put:
+ *     summary: Add a new post
+ *     tags: [Post]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               postId:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Like or unlike user post successfully
+ *       400:
+ *         description: Bad request
+ */
+// postRouter.put('/like', postController.handleLike);
+postRouter.put('/like', authMiddleware, postController.handleLike);
 
 export default postRouter;

@@ -13,14 +13,26 @@ import {
   Modal,
   Grid2,
   TextField,
+  styled,
 } from "@mui/material";
-import NewPostButton from "../components/newPostButton/NewPostButton";
+import NewPostButton from "./newPostButton/NewPostButton";
 import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { IComment, IPost, IPostCommentsModalProps } from "../types";
 import PersonIcon from "@mui/icons-material/Person";
 import SendIcon from "@mui/icons-material/Send";
+import Badge, { badgeClasses } from "@mui/material/Badge";
+import api from "../Api";
+import { BACKEND_URL } from "../config";
+import { isAxiosError } from "axios";
+
+const CartBadge = styled(Badge)`
+  & .${badgeClasses.badge} {
+    top: -12px;
+    right: -6px;
+  }
+`;
 
 const style = {
   position: "absolute",
@@ -152,6 +164,32 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
   );
 };
 
+const LikeButton: React.FC<IPostProps> = ({ props }) => {
+  const [likes, setLikes] = useState(props.likes.length); // Initialize state
+
+  const handleOnLikeClick = () => {
+    api
+      .put(`${BACKEND_URL}/api/post/like`, {
+        postId: "67da401573652e360df14cb0",
+      })
+      .then((res) => {
+        setLikes(res.data.users.length);
+      })
+      .catch((error) => {
+        console.log(error.response?.data?.error || "Axios error occurred");
+      });
+  };
+
+  return (
+    <>
+      <IconButton color="primary" aria-label="like" onClick={handleOnLikeClick}>
+        <ThumbUpRoundedIcon />
+        <CartBadge badgeContent={likes} color="primary" overlap="circular" />
+      </IconButton>
+    </>
+  );
+};
+
 const Post: React.FC<IPostProps> = ({ props }) => {
   const [isCommentModalopen, setIsCommentModalopen] = useState<boolean>(false);
   const handleOpenCommentModal = () => setIsCommentModalopen(true);
@@ -219,9 +257,7 @@ const Post: React.FC<IPostProps> = ({ props }) => {
                 padding: 0,
               }}
             >
-              <IconButton color="primary" aria-label="like">
-                <ThumbUpRoundedIcon />
-              </IconButton>
+              <LikeButton props={props} />
               <IconButton
                 color="primary"
                 aria-label="comment"

@@ -16,4 +16,31 @@ export class PostService {
         await newPost.save(); // Save to MongoDB
         return
     }
+
+    async getLikes(postId: string) {
+          const post = await Post.findById(postId)//.populate("likes", "username email"); // Populate user info
+          if (post) {
+              console.log({post});
+            return { likes: post.likes.length, users: post.likes };
+          } 
+      };
+
+    async likePost(userId: string, postId: string) {
+
+        const post = await Post.findById(postId);
+        if (post) {
+            const alreadyLiked = post.likes.includes(userId);
+
+            if (alreadyLiked) {
+              // Unlike post
+              post.likes = post.likes.filter((id) => id.toString() !== userId);
+            } else {
+              // Like post
+              post.likes.push(userId);
+            }
+        
+            await post.save();
+        }
+        return this.getLikes(postId)
+    }
 }

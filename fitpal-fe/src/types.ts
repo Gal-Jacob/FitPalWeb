@@ -13,11 +13,13 @@ export interface IPostCommentsModalProps {
 export interface IPost {
   id: string;
   author: string;
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date; 
   workout: string;
   details: string;
   imageUrl: string;
+  likes: string[]; 
+  comments: { author: string; comment: string }[]; 
 }
 
 export interface IProfile {

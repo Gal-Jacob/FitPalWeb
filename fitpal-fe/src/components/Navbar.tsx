@@ -11,6 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { TOKEN_LS } from "../config";
 
 interface IPage {
   name: string;
@@ -21,9 +22,10 @@ const pages: IPage[] = [
   { name: "Home", uri: "Home" },
   { name: "Messages", uri: "Messages" },
 ];
+
 const settings: IPage[] = [
   { name: "Profile", uri: "Profile" },
-  { name: "Login", uri: "Login" },
+  { name: "Logout", uri: "Login" },
 ];
 
 function NavBar() {
@@ -42,6 +44,9 @@ function NavBar() {
   };
 
   const handleMoveToPage = (uri: string) => {
+    if (uri == "Login") {
+      localStorage.removeItem(TOKEN_LS);
+    }
     navigate(`/${uri}`);
   };
 
@@ -58,49 +63,57 @@ function NavBar() {
           <Box
             sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
           >
-            {pages.map((page: IPage) => (
-              <Button
-                key={page.name}
-                onClick={() => handleMoveToPage(page.uri)}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page.name}
-              </Button>
-            ))}
+            {localStorage.getItem(TOKEN_LS) &&
+              pages.map((page: IPage) => (
+                <Button
+                  key={page.name}
+                  onClick={() => handleMoveToPage(page.uri)}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.name}
+                </Button>
+              ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting: IPage) => (
-                <MenuItem
-                  key={setting.name}
-                  onClick={() => handleClickOnSetting(setting.uri)}
+            {localStorage.getItem(TOKEN_LS) && (
+              <>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
                 >
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting.name}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
+                  {settings.map((setting: IPage) => (
+                    <MenuItem
+                      key={setting.name}
+                      onClick={() => handleClickOnSetting(setting.uri)}
+                    >
+                      <Typography sx={{ textAlign: "center" }}>
+                        {setting.name}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>
