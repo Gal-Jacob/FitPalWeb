@@ -4,7 +4,7 @@ import {
   WorkoutPlanResponse,
   WorkoutPlan,
 } from "../utils/types";
-import { parseWorkoutPlanFromText } from "../utils/workoutParser";
+import { parseWorkoutPlanFromJson } from "../utils/workoutParser";
 
 export class WorkoutService {
   /**
@@ -34,14 +34,10 @@ export class WorkoutService {
 
       // Generate content
       const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const workoutPlanText = response.text();
+      const workoutPlanText = (await result.response).text();
 
       try {
-        const plan = parseWorkoutPlanFromText(
-          workoutPlanText,
-          workoutData.availability
-        );
+        const plan = parseWorkoutPlanFromJson(workoutPlanText);
 
         return {
           success: true,
@@ -65,6 +61,8 @@ export class WorkoutService {
 
   /**
    * Helper function to create a structured prompt for the AI
+   * @param workoutData The complete workout plan request data
+   * @returns A formatted prompt string for the AI
    */
   private generatePrompt(workoutData: WorkoutPlanRequest): string {
     const {
@@ -79,8 +77,43 @@ export class WorkoutService {
     } = workoutData;
 
     return `You are a professional fitness trainer creating a customized workout plan.
-    
-Create a detailed weekly workout schedule based on the following information:
+
+Your response MUST be formatted according to this exact JSON schema:
+
+{
+  "summary": "Brief overview of the workout plan",
+  "days": [
+    {
+      "day": "Day 1",
+      "focus": "Target muscle groups only (e.g., 'Upper Body', 'Lower Body')",
+      "warmup": [
+        "Warm-up exercise 1",
+        "Warm-up exercise 2"
+      ],
+      "exercises": [
+        {
+          "name": "Exercise name",
+          "sets": 3,
+          "reps": 12,
+          "restPeriod": "60 seconds",
+          "notes": "Optional notes about form or modifications"
+        }
+      ],
+      "cooldown": [
+        "Cool-down exercise 1",
+        "Cool-down exercise 2"
+      ]
+    }
+  ],
+  "notes": [
+    "Additional note 1",
+    "Additional note 2"
+  ],
+  "nutritionTips": [
+    "Nutrition tip 1",
+    "Nutrition tip 2"
+  ]
+}
 
 Client Profile:
 - Fitness Level: ${fitnessLevel}
@@ -100,17 +133,14 @@ Client Profile:
       preferences && preferences.length > 0 ? preferences.join(", ") : "None"
     }
 
-Please format your response as follows for each day:
-
-Day 1: [Focus Area]
-- Exercise 1: [sets] x [reps], [rest period]
-- Exercise 2: [sets] x [reps], [rest period]
-...
-
-Day 2: [Focus Area]
-...
-
-Include exactly ${availability} workout days in your plan.
-Make sure all exercises are suitable given the fitness level and medical considerations.`;
+IMPORTANT: 
+1. Create exactly ${availability} workout days in the "days" array
+2. The "focus" field must ONLY contain the target muscle groups
+3. Each exercise must have all required properties (name, sets, reps, restPeriod)
+4. Include recommendations for rest days in the notes
+5. Add nutrition tips that support the fitness goals
+6. Your entire response must be valid JSON that can be parsed programmatically
+7. DO NOT include explanation text outside the JSON structure
+8. If a user has medical conditions, provide appropriate exercise modifications`;
   }
 }
