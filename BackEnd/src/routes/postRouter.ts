@@ -33,6 +33,22 @@ postRouter.get('/user', authMiddleware, postController.getUserPosts);
 
 /**
  * @swagger
+ * /api/post/my:
+ *   get:
+ *     summary: Get all posts (optionally filter by user)
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     responses:
+ *       200:
+ *         description: All posts retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+postRouter.get('/my', authMiddleware, postController.getMyPosts);
+
+/**
+ * @swagger
  * /api/post/all:
  *   get:
  *     summary: Get all posts
@@ -47,6 +63,29 @@ postRouter.get('/user', authMiddleware, postController.getUserPosts);
  */
 // postRouter.get('/all', postController.getAllPosts);
 postRouter.get('/all', authMiddleware, postController.getAllPosts);
+
+/**
+ * @swagger
+ * /api/post:
+ *   delete:
+ *     summary: Delete post
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: post id to delete
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *       401:
+ *         description: Unauthorized
+ */
+postRouter.delete('', authMiddleware, postController.deletePost);
 
 /**
  * @swagger
@@ -129,5 +168,54 @@ postRouter.get('/like', authMiddleware, postController.getPostsLikes);
  */
 // postRouter.put('/like', postController.handleLike);
 postRouter.put('/like', authMiddleware, postController.handleLike);
+
+/**
+ * @swagger
+ * /api/post/comments:
+ *   get:
+ *     summary: Get all posts (optionally filter by user)
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: get post by postId
+ *     responses:
+ *       200:
+ *         description: Get post comments successfully
+ *       401:
+ *         description: Unauthorized
+ */
+postRouter.get('/comments', authMiddleware, postController.getPostsComments);
+
+/**
+ * @swagger
+ * /api/post/comments:
+ *   put:
+ *     summary: Add a new post
+ *     tags: [Post]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               postId:
+ *                 type: string
+ *               comment:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Added comments on user post successfully
+ *       400:
+ *         description: Bad request
+ */
+postRouter.put('/comments', authMiddleware, postController.handleNewComment);
+
 
 export default postRouter;

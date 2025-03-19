@@ -21,7 +21,7 @@ import api from "../Api";
 import { isAxiosError } from "axios";
 import Swal from "sweetalert2";
 
-export default function Home() {
+function Home() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -75,4 +75,5 @@ export default function Home() {
       <NewPostButton />
     </>
   );
-};
+}
+export default Home;

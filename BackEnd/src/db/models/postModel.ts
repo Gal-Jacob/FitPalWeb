@@ -1,16 +1,22 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 
+export interface IComment {
+    author: string;
+    comment: string;
+}
+
 export interface IPost extends Document {
     id: string;
     author: string;
+    email: string;
     startTime: Date;
     endTime: Date; 
     workout: string;
     details: string;
     imageUrl: string;
     likes: string[]; 
-    comments: { author: string; comment: string }[]; 
+    comments: IComment[]; 
 }
 
 const postSchema: Schema<IPost> = new Schema({
@@ -21,6 +27,7 @@ const postSchema: Schema<IPost> = new Schema({
         trim: true,
     },
     author: { type: String, required: true },
+    email: { type: String, required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     workout: { type: String, required: true },

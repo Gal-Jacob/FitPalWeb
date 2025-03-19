@@ -1,43 +1,43 @@
-const swaggerUi = require('swagger-ui-express');
+const swaggerUi = require("swagger-ui-express");
 
-import swaggerJSDoc from 'swagger-jsdoc';
-import { Express } from 'express';
+import swaggerJSDoc from "swagger-jsdoc";
+import { Express } from "express";
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'FitPal API',
-      version: '1.0.0',
-      description: 'API documentation for FitPal',
+      title: "FitPal API",
+      version: "1.0.0",
+      description: "API documentation for FitPal",
     },
     servers: [
       {
-        url: process.env.BACKEND_URL || 'http://localhost:5000',
+        url: process.env.BACKEND_URL || "http://localhost:5000",
       },
     ],
     components: {
       securitySchemes: {
         BearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT', 
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
     security: [
       {
-        BearerAuth: [], 
+        BearerAuth: [],
       },
     ],
   },
-  apis: ['./src/routes/*.ts',],
+  apis: ["./src/routes/*.ts"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 const setupSwagger = (app: Express) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
 
 export default setupSwagger;
