@@ -1,22 +1,6 @@
-import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Container,
-  Card,
-  CardContent,
-  Box,
-  IconButton,
-  Avatar,
-} from "@mui/material";
 import NewPostButton from "../components/newPostButton/NewPostButton";
-import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
-import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import Post from "../components/Post";
 import { IPost } from "../types";
-import Post from "../components/post";
 
 const temp: IPost[] = [
   {
@@ -48,7 +32,7 @@ const temp: IPost[] = [
   },
 ];
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <div id="home-page">
@@ -59,4 +43,5 @@ export default function Home() {
       <NewPostButton />
     </>
   );
-}
+};
+export default Home;

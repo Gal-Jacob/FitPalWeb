@@ -93,7 +93,6 @@ const Login: React.FC<AuthPagesProps> = ({ onSwitchPage }) => {
         </Card>
       </Container>
   );
-};
-
+}
 
 export default Login;
