@@ -40,6 +40,7 @@ const theme = createTheme({
 const App: React.FC = () => {
   const navigate = useNavigate();
   const [image, setImage] = useState<string | null >(null);
+  const [username, setUsername] = useState<string | null >(null);
 
   useEffect(() => {
     const checkTokenAndFetchProfile = async () => {
@@ -67,6 +68,7 @@ const App: React.FC = () => {
 
         localStorage.setItem(EMAIL_LS, response.data.email);
         setImage(response.data.image);
+        setUsername(`${response.data.firstName} ${response.data.lastName}`);
       } catch (error) {
         console.error(error);
         localStorage.removeItem("token"); 
@@ -88,7 +90,7 @@ const App: React.FC = () => {
           <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Login" element={<AuthPages />} />
           <Route path="/Messages" element={<Messages />} />
-          <Route path="/NewPost" element={<NewPost />} />
+          <Route path="/NewPost" element={<NewPost username={username} />} />
           <Route path="/chat/:chatId" element={<Chatroom />} />
         </Routes>
       </ThemeProvider>

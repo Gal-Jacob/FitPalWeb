@@ -54,8 +54,19 @@ function Home() {
   }, []);
 
   if (loading) {
-    return <CircularProgress color="inherit" />;
-  }
+    return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center", 
+        alignItems: "center", 
+        height: "100vh", 
+        width: "100%", 
+      }}
+    >
+    <CircularProgress /> 
+  </div>
+  )}
   if (error) {
     Swal.fire({
       title: "Error!",

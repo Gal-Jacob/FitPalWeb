@@ -7,6 +7,7 @@ import {
   IconButton,
   ToggleButtonGroup,
   ToggleButton,
+  Box,
 } from "@mui/material";
 import { InsertPhoto, Edit } from "@mui/icons-material";
 
@@ -26,7 +27,7 @@ const Profile: React.FC = () => {
     email: "",
     gender: "",
     height: "",
-    whight: "",
+    weight: "",
     image: "",
   });
   const [view, setView] = React.useState<"workout" | "posts">("workout");
@@ -47,7 +48,7 @@ const Profile: React.FC = () => {
           email: response.data.email || "",
           gender: response.data.gender || "",
           height: response.data.height || "",
-          whight: response.data.weight || "", 
+          weight: response.data.weight || "", 
           image: response.data.image || "",
         });
 
@@ -76,7 +77,7 @@ const Profile: React.FC = () => {
     <div>
       <Container
         sx={{
-          mt: 3,
+          mt: 15,
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
@@ -91,6 +92,7 @@ const Profile: React.FC = () => {
             width: 150,
             height: 150,
             backgroundColor: "#4343f054",
+            border: "2px solid #ddd",
           }}
           src={userProfile.image || undefined}
         >
@@ -98,7 +100,15 @@ const Profile: React.FC = () => {
             <InsertPhoto sx={{ width: 80, height: 80, color: "white" }} />
           )}
         </Avatar>
-        <Typography variant="h5">{userProfile.name}</Typography>
+        <Box>
+          <Typography variant="h5">{userProfile.name}</Typography>
+          <Typography variant="body1" color="textSecondary">
+            Height: {userProfile.height || "N/A"} cm
+          </Typography>
+          <Typography variant="body1" color="textSecondary">
+            Weight: {userProfile.weight || "N/A"} kg
+          </Typography>
+        </Box>
         <IconButton
           color="primary"
           aria-label="like"
