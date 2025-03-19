@@ -9,9 +9,7 @@ import NewPost from "./pages/NewPost";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
 import { useEffect } from "react";
-
-export const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+import { TOKEN_LS } from "./config";
 
 const theme = createTheme({
   palette: {
@@ -37,10 +35,10 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
+    const token = params.get(TOKEN_LS);
     console.log({ token });
     if (token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem(TOKEN_LS, token);
       navigate("/");
     }
   }, [navigate]);

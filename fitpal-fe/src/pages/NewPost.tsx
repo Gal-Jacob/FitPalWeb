@@ -21,6 +21,11 @@ import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { JSX } from "react/jsx-runtime";
+import { useNavigate } from "react-router-dom";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import Swal from "sweetalert2";
+import { error } from "console";
+import api from "../Api";
 
 interface FormState {
   startTime: Dayjs | null;
@@ -32,7 +37,8 @@ interface FormState {
 const NewPost = () => {
   const navigate = useNavigate();
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null | File>(null);
+  const [imagePreview, setImagePreview] = useState<string | null | File>(null);
   const [formData, setFormData] = useState<FormState>({
     startTime: null,
     endTime: null,
@@ -42,10 +48,18 @@ const NewPost = () => {
 
   // Handle image selection
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create a preview URL
-      setSelectedImage(imageUrl);
+    const fileInput = event.target.files;
+
+    if (fileInput && fileInput[0]) {
+      const file = fileInput[0]; // Get the first file selected
+      setImage(file); // Set base64 image preview
+
+      // Optionally, preview the image (for visual feedback)
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file); // Read the file as data URL (for preview)
     }
   };
 
@@ -69,13 +83,43 @@ const NewPost = () => {
   // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({
-      startTime: formData.startTime ? formData.startTime.format("HH:mm") : null,
-      endTime: formData.endTime ? formData.endTime.format("HH:mm") : null,
-      workout: formData.workout,
-      details: formData.details,
-    });
-    alert("Form Submitted!");
+
+    if (!formData.startTime || !formData.endTime || !image) {
+      return;
+    }
+
+    const form = new FormData();
+    form.append("author", "Gal Yaakov"); // TODO: Replace with logged-in user's name
+    form.append("startTime", formData.startTime.format());
+    form.append("endTime", formData.endTime.format());
+    form.append("workout", formData.workout);
+    form.append("details", formData.details);
+    form.append("image", image);
+
+    api
+      .post("http://localhost:5000/api/post/add", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        Swal.fire({
+          title: "Success!",
+          text: "Post added successfully!",
+          icon: "success",
+          confirmButtonText: "Okay",
+        }).then(() => {
+          navigate(-1);
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: `Something went wrong while adding the post. Error: ${error}`,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      });
   };
 
   return (
@@ -99,9 +143,9 @@ const NewPost = () => {
                     alignItems: "center",
                   }}
                 >
-                  {selectedImage ? (
+                  {image ? (
                     <Avatar
-                      src={selectedImage}
+                      src={imagePreview}
                       sx={{ width: 150, height: 150 }}
                     />
                   ) : (

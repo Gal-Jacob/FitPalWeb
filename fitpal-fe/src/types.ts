@@ -10,13 +10,15 @@ export interface ICommentsModalProps {
 }
 
 export interface IPost {
-  postId: string;
-  owner: string;
-  photo: string;
-  title: string;
-  time: string;
+  id: string;
+  author: string;
+  startTime: Date;
+  endTime: Date; 
   workout: string;
   details: string;
+  imageUrl: string;
+  likes: string[]; 
+  comments: { author: string; comment: string }[]; 
 }
 
 export interface IPostProps {
