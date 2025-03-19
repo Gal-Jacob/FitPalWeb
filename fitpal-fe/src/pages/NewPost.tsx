@@ -40,6 +40,7 @@ export default function NewPost() {
   const navigate = useNavigate();
 
   const [image, setImage] = useState<string | null | File>(null);
+  const [imagePreview, setImagePreview] = useState<string | null | File>(null);
   const [formData, setFormData] = useState<FormState>({
     startTime: null,
     endTime: null,
@@ -53,12 +54,12 @@ export default function NewPost() {
 
     if (fileInput && fileInput[0]) {
       const file = fileInput[0]; // Get the first file selected
-      // setImage(file); // Set base64 image preview
+      setImage(file); // Set base64 image preview
 
       // Optionally, preview the image (for visual feedback)
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result as string); // Set base64 image preview
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file); // Read the file as data URL (for preview)
     }
@@ -145,7 +146,10 @@ export default function NewPost() {
                   }}
                 >
                   {image ? (
-                    <Avatar src={image} sx={{ width: 150, height: 150 }} />
+                    <Avatar
+                      src={imagePreview}
+                      sx={{ width: 150, height: 150 }}
+                    />
                   ) : (
                     <Avatar
                       sx={{ width: 150, height: 150, backgroundColor: "white" }}

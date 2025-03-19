@@ -177,22 +177,22 @@ const Post: React.FC<IPostProps> = ({ props }) => {
         </Typography>
         <Card sx={{ maxWidth: 400, mx: "auto", p: 2 }}>
           <CardContent>
-            <Avatar
-              sx={{
-                width: 150,
-                height: 150,
-                backgroundColor: "#4343f054",
-                margin: "auto",
-              }}
-            >
-              {props.imageUrl ? (
-                props.imageUrl
-              ) : (
+            {props.imageUrl ? (
+              <img src={props.imageUrl} alt="Dynamic image" />
+            ) : (
+              <Avatar
+                sx={{
+                  width: 150,
+                  height: 150,
+                  backgroundColor: "#4343f054",
+                  margin: "auto",
+                }}
+              >
                 <InsertPhotoIcon
                   sx={{ width: 80, height: 80, color: "white" }}
                 />
-              )}
-            </Avatar>
+              </Avatar>
+            )}
             <Box
               sx={{
                 display: "flex",
