@@ -20,7 +20,8 @@ const postController = new PostController();
  *       401:
  *         description: Unauthorized
  */
-postRouter.get('/user', authMiddleware, postController.getUserPosts);
+postRouter.get('/user', postController.getUserPosts);
+// postRouter.get('/user', authMiddleware, postController.getUserPosts);
 
 /**
  * @swagger
@@ -51,15 +52,17 @@ postRouter.get('/all', authMiddleware, postController.getAllPosts);
  *           schema:
  *             type: object
  *             properties:
- *               startDate:
+ *               author:
  *                 type: string
- *               endDate:
+ *               startTime:
+ *                 type: string
+ *               endTime:
  *                 type: string
  *               workout:
  *                 type: string
  *               details:
  *                 type: string
- *               image: 
+ *               imageUrl: 
  *                 type: string
  *     responses:
  *       201:
@@ -67,6 +70,7 @@ postRouter.get('/all', authMiddleware, postController.getAllPosts);
  *       400:
  *         description: Bad request
  */
-postRouter.post('/add', authMiddleware, postController.addNewPost);
+postRouter.post('/add', postController.addNewPost);
+// postRouter.post('/add', authMiddleware, postController.addNewPost);
 
 export default postRouter;

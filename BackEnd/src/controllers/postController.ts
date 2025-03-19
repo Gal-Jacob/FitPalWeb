@@ -1,19 +1,17 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import { PostService } from '../services/postService';
 
 class PostController {
-    private userService: UserService;
+    private postService: PostService;
 
     constructor() {
-        this.userService = new UserService();
+        this.postService = new PostService();
     }
 
     public getUserPosts = async (req: Request, res: Response) => {
         try {
-            const userId = (req as any).user.id;
-            //TODO: get user posts
-
-            return res.status(200).json(userId);
+            const user = (req as any).user.id;
+            return res.status(200).json(this.postService.getUserPosts(user));
         } catch (error) {
 
             return res.status(500).json({ message: 'Server error', error });
@@ -22,9 +20,7 @@ class PostController {
 
     public getAllPosts = async (req: Request, res: Response) => {
         try {
-            //TODO: get all posts
-
-            return res.status(200).json({});
+            return res.status(200).json(this.postService.getAllPosts());
         } catch (error) {
 
             return res.status(500).json({ message: 'Server error', error });
@@ -33,10 +29,8 @@ class PostController {
 
     public addNewPost = async (req: Request, res: Response) => {
         try {
-            //TODO: add new post
-            //const user = await this.postService.register(req.body);
-
-            return res.status(201).json({});
+            await this.postService.addPost(req.body);
+            return res.status(201).json({'message': 'Post added successfully'});
         } catch (error) {
 
             if (error instanceof Error) {

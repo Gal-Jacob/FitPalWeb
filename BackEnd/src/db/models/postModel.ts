@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IPost extends Document {
-    id: string;
     author: string;
     startTime: string;
     endTime: string;
@@ -11,12 +10,6 @@ export interface IPost extends Document {
 }
 
 const postSchema: Schema<IPost> = new Schema({
-    id: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-    },
     author: {
         type: String,
     },
@@ -43,6 +36,6 @@ const postSchema: Schema<IPost> = new Schema({
     },
 }, { timestamps: true });
 
-const User = mongoose.model<IPost>('Post', postSchema);
+const Post = mongoose.model<IPost>('Post', postSchema);
 
-export default User;
+export default Post;
