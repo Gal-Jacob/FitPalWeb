@@ -16,7 +16,7 @@ export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 import { EMAIL_LS, TOKEN_LS } from "./config";
-import { TOKEN_LS, EMAIL_LS } from "./config";
+
 import api from "./Api";
 
 const theme = createTheme({
@@ -42,8 +42,10 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      const checkTokenAndFetchProfile = async () => {
-      const token = localStorage.getItem("token") || new URLSearchParams(window.location.search).get("token");
+    const checkTokenAndFetchProfile = async () => {
+      const token =
+        localStorage.getItem("token") ||
+        new URLSearchParams(window.location.search).get("token");
 
       if (!token) {
         navigate("/login");
