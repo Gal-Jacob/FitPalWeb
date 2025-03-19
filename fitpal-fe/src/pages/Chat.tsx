@@ -4,14 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { AppBar, Toolbar, Typography, IconButton, TextField, Button, List, ListItem, ListItemText, Paper, Box, Avatar } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { io, Socket } from "socket.io-client"; 
+import { EMAIL_LS, WEB_SOCKET_URL } from "../config";
 
 interface Message {
-  id: string;
   text: string;
   sender: string;
 }
-
-export const WEB_SOCKET_URL = process.env.VITE_WSS_URL || "http://localhost:8000";
 
 const ChatRoom: React.FC = () => {
   const location = useLocation()
@@ -27,9 +25,9 @@ const ChatRoom: React.FC = () => {
 
     socketRef.current.on("connect", () => {
         console.log("Connected to WebSocket");
-        
+
         if (chat?.id) {
-          socketRef.current?.emit("fetchMessages", chat.id)
+            socketRef.current?.emit("fetchMessages", chat.id)
         }
       })
     
@@ -47,17 +45,17 @@ const ChatRoom: React.FC = () => {
   }, []);
 
   const handleSendMessage = () => {
+    const currentNewMessage = newMessage.trim();
+
+    if (currentNewMessage.length > 0) {
+        debugger
+        socketRef.current?.emit("sendMessage", chat?.id, currentNewMessage, localStorage.getItem(EMAIL_LS) as string);
+        setMessages([...messages, { text: currentNewMessage, sender: localStorage.getItem(EMAIL_LS) as string }]);
+        setNewMessage("");
+    }
     if (newMessage.trim()) {
-      const newMsg: Message = {
-        id: uuidv4(),
-        text: newMessage,
-        sender: "You",
-      };
-
-      socketRef.current?.emit("chat", newMsg);
-
-      setMessages([...messages, newMsg]);
-      setNewMessage("");
+        
+     
     }
   };
 
