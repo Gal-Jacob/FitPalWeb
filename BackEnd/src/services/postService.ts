@@ -1,4 +1,4 @@
-import Post, { IPost } from '../db/models/postModel';
+import Post, { IComment, IPost } from '../db/models/postModel';
 
 export class PostService {
     async getUserPosts(user: string) {
@@ -39,6 +39,23 @@ export class PostService {
               post.likes.push(userId);
             }
         
+            await post.save();
+        }
+        return this.getLikes(postId)
+    }
+
+    async getPostsComments(postId: string) {
+          const post = await Post.findById(postId)
+          if (post) {
+              console.log({post});
+            return { comments: post.comments };
+          } 
+      };
+
+    async handleNewComment(userId: string, comment: string, postId: string) {
+        const post = await Post.findById(postId);
+        if (post) {
+            post.comments.push({author: userId, comment: comment});
             await post.save();
         }
         return this.getLikes(postId)

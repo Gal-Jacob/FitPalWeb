@@ -1,7 +1,7 @@
 
 export interface IComment {
-  owner: string;
-  text: string;
+  author: string;
+  comment: string;
 }
 
 export interface IPostCommentsModalProps {
@@ -19,7 +19,7 @@ export interface IPost {
   details: string;
   imageUrl: string;
   likes: string[]; 
-  comments: { author: string; comment: string }[]; 
+  comments: IComment[]; 
 }
 
 export interface IProfile {

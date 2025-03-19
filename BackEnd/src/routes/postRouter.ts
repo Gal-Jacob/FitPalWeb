@@ -130,4 +130,53 @@ postRouter.get('/like', authMiddleware, postController.getPostsLikes);
 // postRouter.put('/like', postController.handleLike);
 postRouter.put('/like', authMiddleware, postController.handleLike);
 
+/**
+ * @swagger
+ * /api/post/comments:
+ *   get:
+ *     summary: Get all posts (optionally filter by user)
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: get post by postId
+ *     responses:
+ *       200:
+ *         description: Get post comments successfully
+ *       401:
+ *         description: Unauthorized
+ */
+postRouter.get('/comments', authMiddleware, postController.getPostsComments);
+
+/**
+ * @swagger
+ * /api/post/comments:
+ *   post:
+ *     summary: Add a new post
+ *     tags: [Post]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               postId:
+ *                 type: string
+ *             properties:
+ *               comment:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Added new comment on user post successfully
+ *       400:
+ *         description: Bad request
+ */
+postRouter.post('/comments', authMiddleware, postController.handleNewComment);
+
 export default postRouter;

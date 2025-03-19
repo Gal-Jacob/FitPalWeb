@@ -26,6 +26,7 @@ import Badge, { badgeClasses } from "@mui/material/Badge";
 import api from "../Api";
 import { BACKEND_URL } from "../config";
 import { isAxiosError } from "axios";
+import Swal from "sweetalert2";
 
 const CartBadge = styled(Badge)`
   & .${badgeClasses.badge} {
@@ -52,24 +53,24 @@ interface IPostProps {
 }
 
 const TEMP_COMMENTS: IComment[] = [
-  { owner: "Alice", text: "This is amazing!" },
-  { owner: "Bob", text: "Great job, keep it up!" },
-  { owner: "Charlie", text: "I have a question about this." },
-  { owner: "Diana", text: "Really insightful, thanks for sharing." },
-  { owner: "Ethan", text: "Could you provide more details?" },
-  { owner: "Fiona", text: "I completely agree with you." },
-  { owner: "George", text: "This helped me a lot, thank you!" },
-  { owner: "Hannah", text: "I’m not sure I understand, can you clarify?" },
-  { owner: "Ian", text: "This is exactly what I was looking for!" },
-  { owner: "Julia", text: "Awesome work, well done!" },
+  { author: "Alice", comment: "This is amazing!" },
+  { author: "Bob", comment: "Great job, keep it up!" },
+  { author: "Charlie", comment: "I have a question about this." },
+  { author: "Diana", comment: "Really insightful, thanks for sharing." },
+  { author: "Ethan", comment: "Could you provide more details?" },
+  { author: "Fiona", comment: "I completely agree with you." },
+  { author: "George", comment: "This helped me a lot, thank you!" },
+  { author: "Hannah", comment: "I’m not sure I understand, can you clarify?" },
+  { author: "Ian", comment: "This is exactly what I was looking for!" },
+  { author: "Julia", comment: "Awesome work, well done!" },
   {
-    owner: "Kevin",
-    text: "Interesting perspective, I hadn't thought of that.",
+    author: "Kevin",
+    comment: "Interesting perspective, I hadn't thought of that.",
   },
-  { owner: "Laura", text: "Where did you find this information?" },
-  { owner: "Mike", text: "I appreciate your hard work on this." },
-  { owner: "Nina", text: "Can you share more examples?" },
-  { owner: "Oscar", text: "This makes so much sense, thanks!" },
+  { author: "Laura", comment: "Where did you find this information?" },
+  { author: "Mike", comment: "I appreciate your hard work on this." },
+  { author: "Nina", comment: "Can you share more examples?" },
+  { author: "Oscar", comment: "This makes so much sense, thanks!" },
 ];
 
 const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
@@ -79,6 +80,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
 }) => {
   const [comments, setComments] = useState<IComment[]>();
   const [addComment, setAddComment] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(Boolean);
 
   const handleOnChangeComment = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -87,7 +89,22 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
   };
 
   useEffect(() => {
-    //TODO: Load comments
+    api
+      .get(`${BACKEND_URL}/api/post/comments?postId=${postId}`)
+      .then((res) => {
+        setComments(res.data);
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: `Something went wrong while adding the post. Error: ${error.message}`,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
     setComments(TEMP_COMMENTS);
   }, []);
 
@@ -105,7 +122,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
             Comments
           </Typography>
           <Container sx={{ overflowY: "auto", height: 240 }}>
-            {comments?.map((comment, i) => {
+            {comments?.map((c: IComment, i) => {
               return (
                 <Grid2 container>
                   <Grid2 size={1}>
@@ -129,8 +146,8 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
                       component="h2"
                       sx={{ marginBottom: 1.25 }}
                     >
-                      <b>{comment.owner}</b>
-                      {comment.text}
+                      <b>{c.author}</b>
+                      {c.comment}
                     </Typography>
                   </Grid2>
                 </Grid2>
