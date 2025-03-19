@@ -16,6 +16,7 @@ export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 import { TOKEN_LS } from "./config";
+import api from "./Api";
 
 const theme = createTheme({
   palette: {
@@ -53,7 +54,7 @@ const App: React.FC = () => {
       const fetchUserProfile = async () => {
         try { 
           console.log( `Bearer ${localStorage.getItem("token")}`)
-          const response = await axios.get(`${BACKEND_URL}/api/user/profile`, { headers: {  Authorization: `Bearer ${localStorage.getItem("token")}`} })
+          const response = await api.get(`${BACKEND_URL}/api/user/profile`)
 
           console.log(response)
         } catch (error) {

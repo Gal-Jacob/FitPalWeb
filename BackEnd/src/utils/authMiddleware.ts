@@ -18,6 +18,7 @@ const authMiddleware = async (req: AuthenticatedRequest, res: Response, next: Ne
     // CheckJ WT from username and pass
     const secret = process.env.JWT_SECRET || "";
     const decoded = jwt.verify(token, secret);
+    console.log(decoded)
     next();
   } catch (err) {
     // Check JWT from google
