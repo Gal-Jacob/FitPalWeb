@@ -124,8 +124,6 @@ class UserController {
         }
     };
 
-<<<<<<< HEAD
-=======
     public searchUsersByEmail = async (req: Request, res: Response) => {
         try {
             const { email } = req.query;
@@ -139,7 +137,6 @@ class UserController {
             return res.status(500).json({ message: 'Server error', error });
         }
     };
->>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
 }
 
 export default UserController;

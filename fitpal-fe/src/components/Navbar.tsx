@@ -11,7 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { TOKEN_LS } from "../config";
+import { EMAIL_LS, TOKEN_LS } from "../config";
 
 interface IPage {
   name: string;
@@ -46,6 +46,7 @@ const NavBar = () => {
   const handleMoveToPage = (uri: string) => {
     if (uri == "Login") {
       localStorage.removeItem(TOKEN_LS);
+      localStorage.removeItem(EMAIL_LS);
     }
     navigate(`/${uri}`);
   };
