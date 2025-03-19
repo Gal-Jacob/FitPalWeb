@@ -133,7 +133,7 @@ userRouter.get('/google', passport.authenticate('google', { scope: ['profile', '
  */
 userRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
 (req, res) => {
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';  
   const token = req.user ? (req.user as any).accessToken : null; 
 
   if (token) {

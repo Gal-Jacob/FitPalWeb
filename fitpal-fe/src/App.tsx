@@ -15,6 +15,8 @@ import axios from "axios";
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
+import { TOKEN_LS } from "./config";
+
 const theme = createTheme({
   palette: {
     primary: {
