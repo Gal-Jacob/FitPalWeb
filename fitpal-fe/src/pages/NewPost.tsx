@@ -1,11 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Container,
-  Card,
   CardContent,
   TextField,
   MenuItem,
@@ -16,9 +14,9 @@ import {
   OutlinedTextFieldProps,
   StandardTextFieldProps,
   TextFieldVariants,
-  Box,
   Avatar,
 } from "@mui/material";
+import { AddPhotoAlternate } from "@mui/icons-material";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
@@ -36,7 +34,7 @@ interface FormState {
   details: string;
 }
 
-export default function NewPost() {
+const NewPost = () => {
   const navigate = useNavigate();
 
   const [image, setImage] = useState<string | null | File>(null);
@@ -154,7 +152,7 @@ export default function NewPost() {
                     <Avatar
                       sx={{ width: 150, height: 150, backgroundColor: "white" }}
                     >
-                      <AddPhotoAlternateIcon
+                      <AddPhotoAlternate
                         sx={{ width: 80, height: 80, color: "#7f7d7d" }}
                       />
                     </Avatar>
@@ -280,4 +278,6 @@ export default function NewPost() {
       </Container>
     </div>
   );
-}
+};
+
+export default NewPost;
