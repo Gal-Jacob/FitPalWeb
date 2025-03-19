@@ -11,6 +11,7 @@ export interface IPostCommentsModalProps {
 }
 
 export interface IPost {
+  _id: string;
   id: string;
   author: string;
   startTime: Date;

@@ -156,7 +156,7 @@ postRouter.get('/comments', authMiddleware, postController.getPostsComments);
 /**
  * @swagger
  * /api/post/comments:
- *   post:
+ *   put:
  *     summary: Add a new post
  *     tags: [Post]
  *     requestBody:
@@ -168,15 +168,15 @@ postRouter.get('/comments', authMiddleware, postController.getPostsComments);
  *             properties:
  *               postId:
  *                 type: string
- *             properties:
  *               comment:
  *                 type: string
  *     responses:
  *       201:
- *         description: Added new comment on user post successfully
+ *         description: Added comments on user post successfully
  *       400:
  *         description: Bad request
  */
-postRouter.post('/comments', authMiddleware, postController.handleNewComment);
+postRouter.put('/comments', authMiddleware, postController.handleNewComment);
+
 
 export default postRouter;

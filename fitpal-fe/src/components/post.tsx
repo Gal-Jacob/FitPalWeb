@@ -40,8 +40,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  height: 400,
+  width: 600,
+  height: 600,
   bgcolor: "background.paper",
   borderRadius: "5px",
   boxShadow: 24,
@@ -78,7 +78,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
   closeModal,
   isOpen,
 }) => {
-  const [comments, setComments] = useState<IComment[]>();
+  const [comments, setComments] = useState<IComment[]>([]);
   const [addComment, setAddComment] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(Boolean);
 
@@ -88,11 +88,15 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
     setAddComment(event.target.value);
   };
 
-  useEffect(() => {
+  const handlePostComment = (event: React.ChangeEvent<HTMLInputElement>) => {
     api
-      .get(`${BACKEND_URL}/api/post/comments?postId=${postId}`)
+      .put(`${BACKEND_URL}/api/post/comments`, {
+        postId: postId,
+        comment: addComment,
+      })
       .then((res) => {
-        setComments(res.data);
+        setComments(res.data.comments);
+        setAddComment("");
       })
       .catch((error) => {
         Swal.fire({
@@ -105,7 +109,25 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
       .finally(() => {
         setLoading(false);
       });
-    setComments(TEMP_COMMENTS);
+  };
+
+  useEffect(() => {
+    api
+      .get(`${BACKEND_URL}/api/post/comments?postId=${postId}`)
+      .then((res) => {
+        setComments(res.data.comments);
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: `Something went wrong while adding the post. Error: ${error.message}`,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -116,12 +138,12 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
             variant="h5"
             sx={{
               marginBottom: 0,
-              padding: "20px 20px 0px 20px",
+              padding: "10px 20px 0px 20px",
             }}
           >
             Comments
           </Typography>
-          <Container sx={{ overflowY: "auto", height: 240 }}>
+          <Container sx={{ overflowY: "auto", height: 450 }}>
             {comments?.map((c: IComment, i) => {
               return (
                 <Grid2 container>
@@ -146,8 +168,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
                       component="h2"
                       sx={{ marginBottom: 1.25 }}
                     >
-                      <b>{c.author}</b>
-                      {c.comment}
+                      <b>{c.author}</b> {c.comment}
                     </Typography>
                   </Grid2>
                 </Grid2>
@@ -171,7 +192,11 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
               value={addComment}
               onChange={handleOnChangeComment}
             />
-            <IconButton variant="contained" color="secondary">
+            <IconButton
+              variant="contained"
+              color="secondary"
+              onClick={handlePostComment}
+            >
               <SendIcon />
             </IconButton>
           </div>
@@ -226,11 +251,11 @@ const Post: React.FC<IPostProps> = ({ props }) => {
 
   return (
     <>
-      <Container sx={{ mt: 4, width: 500 }}>
+      <Container sx={{ mt: 4, width: 700 }}>
         <Typography variant="body1" gutterBottom>
           {props.author}
         </Typography>
-        <Card sx={{ maxWidth: 400, mx: "auto", p: 2 }}>
+        <Card sx={{ maxWidth: 650, mx: "auto", p: 2 }}>
           <CardContent>
             {props.imageUrl ? (
               <img src={props.imageUrl} alt="Dynamic image" />
@@ -289,7 +314,7 @@ const Post: React.FC<IPostProps> = ({ props }) => {
       <PostCommentsModal
         isOpen={isCommentModalopen}
         closeModal={handleCloseCommentModal}
-        postId={props.id}
+        postId={props._id}
       />
     </>
   );
