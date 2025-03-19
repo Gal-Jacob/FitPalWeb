@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 
 export interface IPost extends Document {
+    id: string;
     author: string;
     startTime: string;
     endTime: string;
@@ -10,6 +12,12 @@ export interface IPost extends Document {
 }
 
 const postSchema: Schema<IPost> = new Schema({
+    id: {
+        type: String,
+        default: uuidv4, // Automatically generates a UUID
+        unique: true,
+        trim: true,
+    },
     author: {
         type: String,
     },

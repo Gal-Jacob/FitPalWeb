@@ -10,8 +10,13 @@ class PostController {
 
     public getUserPosts = async (req: Request, res: Response) => {
         try {
-            const user = (req as any).user.id;
-            return res.status(200).json(this.postService.getUserPosts(user));
+            const user = req.query.user as string | undefined;
+
+            if (!user) {
+                return res.status(404).json({ error: "User query parameter is required" });
+            }
+
+            return res.status(200).json(await this.postService.getUserPosts(user))
         } catch (error) {
 
             return res.status(500).json({ message: 'Server error', error });
@@ -20,7 +25,7 @@ class PostController {
 
     public getAllPosts = async (req: Request, res: Response) => {
         try {
-            return res.status(200).json(this.postService.getAllPosts());
+            return res.status(200).json(await this.postService.getAllPosts());
         } catch (error) {
 
             return res.status(500).json({ message: 'Server error', error });
@@ -29,6 +34,7 @@ class PostController {
 
     public addNewPost = async (req: Request, res: Response) => {
         try {
+            console.log(req.body)
             await this.postService.addPost(req.body);
             return res.status(201).json({'message': 'Post added successfully'});
         } catch (error) {

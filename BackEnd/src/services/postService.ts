@@ -6,7 +6,7 @@ export class PostService {
     }
 
     async getAllPosts() {
-        return await Post.find().exec();
+        return await Post.find();
     }
 
     async addPost(post: IPost) {

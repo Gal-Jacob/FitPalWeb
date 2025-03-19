@@ -8,15 +8,22 @@ const postController = new PostController();
 
 /**
  * @swagger
- * /api/post/user:
+ * /api/post/all:
  *   get:
- *     summary: Get user posts
+ *     summary: Get all posts (optionally filter by user)
  *     tags: [Post]
  *     security:
  *       - BearerAuth: [] 
+ *     parameters:
+ *       - in: query
+ *         name: user
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: Filter posts by user (author)
  *     responses:
  *       200:
- *         description: User posts retrieved successfully
+ *         description: All posts retrieved successfully
  *       401:
  *         description: Unauthorized
  */
@@ -37,7 +44,8 @@ postRouter.get('/user', postController.getUserPosts);
  *       401:
  *         description: Unauthorized
  */
-postRouter.get('/all', authMiddleware, postController.getAllPosts);
+postRouter.get('/all', postController.getAllPosts);
+// postRouter.get('/all', authMiddleware, postController.getAllPosts);
 
 /**
  * @swagger
