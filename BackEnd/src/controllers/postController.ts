@@ -78,12 +78,52 @@ class PostController {
     public handleLike = async (req: Request | any, res: Response) => {
         try {            
             let {postId} = req.body
-            if (req.user.user_id) {
-                console.log(req.user.user_id);
-                const userId: string = req.user.user_id; 
-                return res.status(201).json(await this.postService.likePost(userId, postId));
+            console.log(req.user);
+            
+            if (req.user.email) {
+                console.log(req.user.email);
+                const email: string = req.user.email; 
+                return res.status(201).json(await this.postService.likePost(email, postId));
             }
 
+        } catch (error) {
+
+            if (error instanceof Error) {
+                return res.status(400).json({ message: error.message });
+
+            } else {
+                return  res.status(400).json({ message: 'An unknown error occurred' });
+            }
+        }
+    };
+
+    public getPostsComments = async (req: Request | any, res: Response) => {
+        try {        
+
+            const postId = req.query.postId as string | undefined;
+            
+            if (postId) {
+                return res.status(200).json(await this.postService.getPostsComments(postId));
+            } else {
+                return res.status(400).json({ message: 'NO postId' });
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                return res.status(400).json({ message: error.message });
+
+            } else {
+                return  res.status(400).json({ message: 'An unknown error occurred' });
+            }
+        }
+    };
+
+    public handleNewComment = async (req: Request | any, res: Response) => {
+        try {            
+            let {postId, comment} = req.body
+            if (req.user.email) {
+                const email: string = req.user.email; 
+                return res.status(201).json(await this.postService.handleNewComment(email, comment, postId));
+            }
         } catch (error) {
 
             if (error instanceof Error) {

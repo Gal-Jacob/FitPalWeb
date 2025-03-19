@@ -1,6 +1,6 @@
 export interface IComment {
-  owner: string;
-  text: string;
+  author: string;
+  comment: string;
 }
 
 export interface ICommentsModalProps {
@@ -10,6 +10,7 @@ export interface ICommentsModalProps {
 }
 
 export interface IPost {
+  _id: string;
   id: string;
   author: string;
   startTime: Date;
@@ -18,7 +19,7 @@ export interface IPost {
   details: string;
   imageUrl: string;
   likes: string[]; 
-  comments: { author: string; comment: string }[]; 
+  comments: IComment[]; 
 }
 
 export interface IPostProps {
@@ -38,7 +39,9 @@ export interface IProfile {
 export interface IExercise {
   name: string;
   sets: string | number;
-  reps: string;
+  reps: string | string;
+  restPeriod?: string;
+  notes?: string;
 }
 
 export interface IGuideline {
@@ -51,6 +54,22 @@ export interface ISchedule {
   workout: string;
 }
 
+export interface IScheduleCardProps {
+  schedule: ISchedule[];
+}
+
 export interface IWorkoutPlan {
   exercises: IExercise[];
+}
+
+interface IWorkoutDay {
+  day: string;
+  focus: string;
+  exercises: IExercise[];
+  warmup: string[];
+  cooldown: string[];
+}
+
+export interface IWorkoutPlanProps {
+  days: IWorkoutDay[];
 }
