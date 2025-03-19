@@ -5,6 +5,14 @@ export class PostService {
         return await Post.find({author: user}).exec();
     }
 
+    async deletePost(postId: string) {
+        return await Post.findByIdAndDelete(postId).exec();
+    }
+
+    async getPostByEmail(email: string) {
+        return await Post.find({email: email}).exec();
+    }
+
     async getAllPosts() {
         return await Post.find();
     }

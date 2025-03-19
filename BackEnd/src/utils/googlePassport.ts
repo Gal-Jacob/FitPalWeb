@@ -30,9 +30,12 @@ passport.use(
         user.refreshToken = refreshToken;
         await user.save();
       }
+      return done(null, user);
+    } catch (error) {
+      return done(error, false);
     }
-  )
-);
+  }
+));
 
 passport.serializeUser((user, done) => {
   done(null, user);

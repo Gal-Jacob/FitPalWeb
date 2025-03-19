@@ -24,6 +24,37 @@ class PostController {
         }
     };
 
+    public deletePost = async (req: Request, res: Response) => {
+        try {
+            const postId = req.query.postId as string | undefined;
+
+            if (!postId) {
+                return res.status(404).json({ error: "postId query parameter is required" });
+            }
+
+            return res.status(200).json(await this.postService.deletePost(postId))
+        } catch (error) {
+
+            return res.status(500).json({ message: 'Server error', error });
+        }
+    };
+
+    public getMyPosts = async (req: Request | any, res: Response) => {
+
+        try {
+            if (req.user?.email) {
+                console.log(req.user.email);
+                const email: string = req.user.email; 
+                return res.status(200).json(await this.postService.getPostByEmail(email));
+            } else {
+                return res.status(400).json({"message": "email not provided"})
+            }
+        } catch (error) {
+
+            return res.status(500).json({ message: 'Server error', error });
+        }
+    };
+
     public getAllPosts = async (req: Request, res: Response) => {
         try {
             return res.status(200).json(await this.postService.getAllPosts());
@@ -33,7 +64,7 @@ class PostController {
         }
     };
 
-    public addNewPost = async (req: Request, res: Response) => {
+    public addNewPost = async (req: Request | any, res: Response) => {
         try {            
             if (!req.file) {
                 return res.status(400).json({ message: 'No file uploaded' });
@@ -41,6 +72,7 @@ class PostController {
 
             let data = req.body
             data.imageUrl = `${BACKEND_URL}/${req.file.path.replace(/\\/g, '/')}`
+            data.email = req.user.email; 
 
             await this.postService.addPost(data);
             return res.status(201).json({'message': 'Post added successfully'});
