@@ -121,7 +121,8 @@ const Messages: React.FC = () => {
             ? currentChat.messages[currentChat.messages.length - 1].text 
             : 'No messages yet';
             debugger
-          const newChat: LastChatInfo = { id: currentChat.id, lastMessages: lastMessage, name: currentChat.users[1] };
+          const username = currentChat.users[0] === localStorage.getItem(EMAIL_LS) ? currentChat.users[1] : currentChat.users[0];
+          const newChat: LastChatInfo = { id: currentChat.id, lastMessages: lastMessage, name: username };
           setChats((prev) => [...prev, newChat]);
         })        
       } else {
