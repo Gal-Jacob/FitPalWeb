@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Typography,
   Container,
@@ -10,6 +10,7 @@ import {
   Grid2,
   TextField,
   styled,
+  IconButton,
 } from "@mui/material";
 import NewPostButton from "./newPostButton/NewPostButton";
 import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
@@ -23,6 +24,8 @@ import api from "../Api";
 import { BACKEND_URL } from "../config";
 import { isAxiosError } from "axios";
 import Swal from "sweetalert2";
+import { ChatBubbleOutlineRounded } from "@mui/icons-material";
+import CommentsModal from "./CommentsModal";
 
 const CartBadge = styled(Badge)`
   & .${badgeClasses.badge} {
@@ -233,7 +236,11 @@ const Post: React.FC<IPostProps> = ({ props }) => {
         <Card sx={{ maxWidth: 650, mx: "auto", p: 2 }}>
           <CardContent>
             {props.imageUrl ? (
-              <img src={props.imageUrl} alt="Dynamic image" />
+              <img
+                src={props.imageUrl}
+                alt="Dynamic image"
+                style={{ width: "300px", height: "300px" }}
+              />
             ) : (
               <Avatar
                 sx={{
@@ -281,12 +288,12 @@ const Post: React.FC<IPostProps> = ({ props }) => {
                 onClick={handleOpenCommentModal}
               >
                 <ChatBubbleOutlineRounded />
-              </CustomIconButton>
+              </IconButton>
             </Box>
           </CardContent>
         </Card>
       </Container>
-      <CommentsModal
+      <PostCommentsModal
         isOpen={isCommentModalopen}
         closeModal={handleCloseCommentModal}
         postId={props._id}

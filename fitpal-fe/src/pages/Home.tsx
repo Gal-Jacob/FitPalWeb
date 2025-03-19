@@ -16,13 +16,12 @@ import {
 import NewPostButton from "../components/newPostButton/NewPostButton";
 import Post from "../components/Post";
 import { IPost } from "../types";
-import Post from "../components/Post";
 import { BACKEND_URL } from "../config";
 import api from "../Api";
 import { isAxiosError } from "axios";
 import Swal from "sweetalert2";
 
-export default function Home() {
+function Home() {
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,5 +75,5 @@ export default function Home() {
       <NewPostButton />
     </>
   );
-};
+}
 export default Home;
