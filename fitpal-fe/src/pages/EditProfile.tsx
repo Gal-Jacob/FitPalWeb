@@ -65,7 +65,7 @@ const EditProfile = () => {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file); // Create a preview URL
+      const imageUrl = URL.createObjectURL(file); 
       setSelectedImage(imageUrl);
     }
   };
@@ -77,15 +77,26 @@ const EditProfile = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({
-      height: formData.height,
-      weight: formData.weight,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-    });
-    alert("Form Submitted!");
+    try {
+      const token = localStorage.getItem("token"); 
+      await api.patch(
+        `${BACKEND_URL}/api/user/profile`,
+        {
+          weight: formData.weight,
+          height: formData.height,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        }
+      );
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   const handleSaveOrEdit = async () => {
@@ -105,7 +116,6 @@ const EditProfile = () => {
             },
           }
         );
-        alert("Profile updated successfully!");
       } catch (error) {
         console.error("Error updating profile:", error);
       }
@@ -153,7 +163,6 @@ const EditProfile = () => {
                     </Avatar>
                   )}
 
-                  {/* Hidden file input */}
                   <input
                     accept="image/*"
                     type="file"
@@ -162,7 +171,6 @@ const EditProfile = () => {
                     onChange={handleImageChange}
                   />
 
-                  {/* Upload Button */}
                   <label htmlFor="image-upload">
                     <Button
                       sx={{ marginTop: 1 }}
@@ -175,7 +183,6 @@ const EditProfile = () => {
                   </label>
                 </div>
 
-                {/* Editable Name Fields */}
                 <div style={{ 
                   display: "flex",
                   justifyContent: 'center', 
@@ -218,7 +225,6 @@ const EditProfile = () => {
 
                 <Grid container spacing={2}>
                   <Grid size={6}>
-                    {/* Text Field */}
                     <TextField
                       name="height"
                       label="Height"
@@ -237,7 +243,6 @@ const EditProfile = () => {
                     />
                   </Grid>
                   <Grid size={6}>
-                    {/* Text Field */}
                     <TextField
                       name="weight"
                       label="Weight"
@@ -257,7 +262,6 @@ const EditProfile = () => {
                   </Grid>
                 </Grid>
 
-                {/* Submit Button */}
                 <Button
                   type="submit"
                   variant="contained"
