@@ -1,31 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  TextField,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Box,
-  Avatar,
-} from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { io, Socket } from "socket.io-client";
+import { AppBar, Toolbar, Typography, IconButton, TextField, Button, List, ListItem, ListItemText, Paper, Box, Avatar } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { io, Socket } from "socket.io-client"; 
+import { EMAIL_LS, WEB_SOCKET_URL } from "../config";
+
 
 interface Message {
-  id: string;
   text: string;
   sender: string;
 }
-
-export const WEB_SOCKET_URL =
-  import.meta.env.VITE_WSS_URL || "http://localhost:8000";
 
 const ChatRoom: React.FC = () => {
   const location = useLocation();
@@ -40,20 +25,22 @@ const ChatRoom: React.FC = () => {
     socketRef.current = io(WEB_SOCKET_URL);
 
     socketRef.current.on("connect", () => {
-      console.log("Connected to WebSocket");
 
-      if (chat?.id) {
-        socketRef.current?.emit("fetchMessages", chat.id);
-      }
-    });
+        console.log("Connected to WebSocket");
 
-    socketRef.current.on("chatMessages", (data) => {
-      if (data.success) {
-        setMessages(data.messages);
-      } else {
-        console.error(`Error ${data.status}: ${data.error}`);
-      }
-    });
+        if (chat?.id) {
+            socketRef.current?.emit("fetchMessages", chat.id)
+        }
+      })
+    
+      socketRef.current.on("chatMessages", (data) => {
+        if (data.success) {
+          setMessages(data.messages);
+        } else {
+          console.error(`Error ${data.status}: ${data.error}`)
+        }
+      })
+
 
     return () => {
       socketRef.current?.disconnect();
@@ -61,17 +48,17 @@ const ChatRoom: React.FC = () => {
   }, []);
 
   const handleSendMessage = () => {
+    const currentNewMessage = newMessage.trim();
+
+    if (currentNewMessage.length > 0) {
+        debugger
+        socketRef.current?.emit("sendMessage", chat?.id, currentNewMessage, localStorage.getItem(EMAIL_LS) as string);
+        setMessages([...messages, { text: currentNewMessage, sender: localStorage.getItem(EMAIL_LS) as string }]);
+        setNewMessage("");
+    }
     if (newMessage.trim()) {
-      const newMsg: Message = {
-        id: uuidv4(),
-        text: newMessage,
-        sender: "You",
-      };
-
-      socketRef.current?.emit("chat", newMsg);
-
-      setMessages([...messages, newMsg]);
-      setNewMessage("");
+        
+     
     }
   };
 
