@@ -47,7 +47,7 @@ export interface Workout {
 export interface Exercise {
   name: string;
   sets?: number;
-  reps?: number;
+  reps?: number | string;
   duration?: string;
   restPeriod?: string;
   notes?: string;

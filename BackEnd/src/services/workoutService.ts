@@ -136,11 +136,24 @@ Client Profile:
 IMPORTANT: 
 1. Create exactly ${availability} workout days in the "days" array
 2. The "focus" field must ONLY contain the target muscle groups
-3. Each exercise must have all required properties (name, sets, reps, restPeriod)
-4. Include recommendations for rest days in the notes
-5. Add nutrition tips that support the fitness goals
-6. Your entire response must be valid JSON that can be parsed programmatically
-7. DO NOT include explanation text outside the JSON structure
-8. If a user has medical conditions, provide appropriate exercise modifications`;
+3. All field values must be valid JSON:
+   - String values must be in quotes (e.g., "Upper Body")
+   - Number values should NOT have quotes (e.g., 3 for sets)
+   - For ranges like "8-12 reps", use a string value with quotes (e.g., "8-12")
+4. DO NOT use trailing commas in arrays or objects. For example:
+   - CORRECT: ["item1", "item2"]
+   - INCORRECT: ["item1", "item2",]
+5. DO NOT split string values with commas.
+   - CORRECT: ["Light cardio like walking"]
+   - INCORRECT: ["Light cardio", "like walking"]
+6. Each array element must be a complete string:
+   - CORRECT: ["Progress gradually by increasing weight, reps, or sets"]
+   - INCORRECT: ["Progress gradually by increasing weight", "reps", "or sets"]
+7. Add nutrition tips that support the fitness goals
+8. Your entire response must be valid JSON that can be parsed programmatically
+9. DO NOT include explanation text outside the JSON structure
+10. If a user has medical conditions, provide appropriate exercise modifications
+11. Ensure the workout plan is safe, effective, and tailored to the user's goals
+12. Make sure to add a suggested weekly schedule with rest days`;
   }
 }
