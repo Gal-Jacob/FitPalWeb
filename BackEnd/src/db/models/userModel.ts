@@ -1,5 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose, { Document, Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
     email: string;
@@ -9,46 +9,59 @@ export interface IUser extends Document {
     googleId?: string;
     accessToken?: string;
     refreshToken?: string;
+    lastWorkoutGenerated?: Date;
+    workout?: object;
     comparePassword: (password: string) => Promise<boolean>;
 }
 
-const userSchema: Schema<IUser> = new Schema({
+const userSchema: Schema<IUser> = new Schema(
+  {
     email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
     password: {
-        type: String,
+      type: String,
     },
     firstName: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true,
     },
     lastName: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true,
     },
     googleId: {
-        type: String,
+      type: String,
     },
     refreshToken: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
     accessToken: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
+    lastWorkoutGenerated: {
+
+        type: Date,
+    },
+    workout: { 
+        type: Object,
+    }
+
 }, { timestamps: true });
 
-userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
-    return await bcrypt.compare(password, this.password);
+userSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
 };
 
-const User = mongoose.model<IUser>('User', userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;

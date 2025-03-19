@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Container,
@@ -16,7 +16,7 @@ import NewPostButton from "./newPostButton/NewPostButton";
 import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
-import { IComment, IPost, IPostCommentsModalProps } from "../types";
+import { IComment, IPost, ICommentsModalProps } from "../types";
 import PersonIcon from "@mui/icons-material/Person";
 import SendIcon from "@mui/icons-material/Send";
 import Badge, { badgeClasses } from "@mui/material/Badge";
@@ -51,7 +51,7 @@ interface IPostProps {
   props: IPost;
 }
 
-const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
+const PostCommentsModal: React.FC<ICommentsModalProps> = ({
   postId,
   closeModal,
   isOpen,
