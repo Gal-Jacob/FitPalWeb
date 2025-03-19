@@ -10,9 +10,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
 import { useEffect } from "react";
 
-export const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-
 const theme = createTheme({
   palette: {
     primary: {

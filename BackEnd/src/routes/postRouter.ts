@@ -8,7 +8,7 @@ const postController = new PostController();
 
 /**
  * @swagger
- * /api/post/all:
+ * /api/post/user:
  *   get:
  *     summary: Get all posts (optionally filter by user)
  *     tags: [Post]

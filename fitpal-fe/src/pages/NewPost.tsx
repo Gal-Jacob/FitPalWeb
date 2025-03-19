@@ -25,6 +25,9 @@ import dayjs, { Dayjs } from "dayjs";
 import { JSX } from "react/jsx-runtime";
 import { useNavigate } from "react-router-dom";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { error } from "console";
 
 interface FormState {
   startTime: Dayjs | null;
@@ -73,13 +76,41 @@ export default function NewPost() {
   // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log({
-      startTime: formData.startTime ? formData.startTime.format("HH:mm") : null,
-      endTime: formData.endTime ? formData.endTime.format("HH:mm") : null,
+
+    const postData = {
+      author: "Gal Yaakov", //TODO: replace with the user that loged in
+      startTime: formData.startTime ? formData.startTime.format() : null,
+      endTime: formData.endTime ? formData.endTime.format() : null,
       workout: formData.workout,
       details: formData.details,
-    });
-    alert("Form Submitted!");
+      imageUrl: "image",
+    };
+
+    axios
+      .post("http://localhost:5000/api/post/add", postData, {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "*/*",
+        },
+      })
+      .then((res) => {
+        Swal.fire({
+          title: "Success!",
+          text: "Post added successfully!",
+          icon: "success",
+          confirmButtonText: "Okay",
+        }).then(() => {
+          navigate(-1);
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: `Something went wrong while adding the post. Error: ${error}`,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      });
   };
 
   return (

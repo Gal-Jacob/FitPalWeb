@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -17,43 +17,43 @@ import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineR
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { IPost } from "../types";
 import Post from "../components/post";
-
-const temp: IPost[] = [
-  {
-    postId: "1",
-    owner: "Gal Yaakov",
-    photo: "",
-    title: "Workout finished",
-    time: "1:15:00",
-    workout: "Full Body",
-    details: "Today was a good Workout",
-  },
-  {
-    postId: "2",
-    owner: "Yoav David",
-    photo: "",
-    title: "Workout finished",
-    time: "1:15:00",
-    workout: "Upper Body",
-    details: "Today was a good Workout",
-  },
-  {
-    postId: "3",
-    owner: "Ido Sharon",
-    photo: "",
-    title: "Workout finished",
-    time: "4:15:00",
-    workout: "Only ass",
-    details: "Today was a good Workout",
-  },
-];
+import { BACKEND_URL } from "../config";
+import axios from "axios";
 
 export default function Home() {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const getAllPosts = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/post/all`);
+      setPosts(response.data);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || "Axios error occurred");
+      } else if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
     <>
       <div id="home-page">
-        {temp.map((post: IPost) => {
-          return <Post key={post.postId} props={post} />;
+        {posts.map((post: IPost) => {
+          return <Post key={post.id} props={post} />;
         })}
       </div>
       <NewPostButton />

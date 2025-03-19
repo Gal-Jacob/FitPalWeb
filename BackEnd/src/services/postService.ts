@@ -10,6 +10,8 @@ export class PostService {
     }
 
     async addPost(post: IPost) {
+        post.likes = []
+        post.comments = []
         const newPost = new Post(post);
         await newPost.save(); // Save to MongoDB
         return

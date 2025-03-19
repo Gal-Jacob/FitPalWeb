@@ -157,11 +157,23 @@ const Post: React.FC<IPostProps> = ({ props }) => {
   const handleOpenCommentModal = () => setIsCommentModalopen(true);
   const handleCloseCommentModal = () => setIsCommentModalopen(false);
 
+  const calculateTimeDifference = (startTime: string, endTime: string) => {
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+
+    const diffMs = end.getTime() - start.getTime(); // Difference in milliseconds
+    const diffMinutes = Math.floor(diffMs / (1000 * 60)); // Convert to minutes
+    const hours = Math.floor(diffMinutes / 60);
+    const minutes = diffMinutes % 60;
+
+    return `${hours}h ${minutes}m`;
+  };
+
   return (
     <>
       <Container sx={{ mt: 4, width: 500 }}>
         <Typography variant="body1" gutterBottom>
-          {props.owner}
+          {props.author}
         </Typography>
         <Card sx={{ maxWidth: 400, mx: "auto", p: 2 }}>
           <CardContent>
@@ -173,12 +185,14 @@ const Post: React.FC<IPostProps> = ({ props }) => {
                 margin: "auto",
               }}
             >
-              {props.photo}
-              <InsertPhotoIcon sx={{ width: 80, height: 80, color: "white" }} />
+              {props.imageUrl ? (
+                props.imageUrl
+              ) : (
+                <InsertPhotoIcon
+                  sx={{ width: 80, height: 80, color: "white" }}
+                />
+              )}
             </Avatar>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-              {props.title}
-            </Typography>
             <Box
               sx={{
                 display: "flex",
@@ -188,7 +202,7 @@ const Post: React.FC<IPostProps> = ({ props }) => {
               }}
             >
               <Typography variant="body1" gutterBottom>
-                {props.time}
+                time: {calculateTimeDifference(props.startTime, props.endTime)}
               </Typography>
               <Typography variant="body1" gutterBottom>
                 {props.workout}
@@ -222,7 +236,7 @@ const Post: React.FC<IPostProps> = ({ props }) => {
       <PostCommentsModal
         isOpen={isCommentModalopen}
         closeModal={handleCloseCommentModal}
-        postId={props.postId}
+        postId={props.id}
       />
     </>
   );
