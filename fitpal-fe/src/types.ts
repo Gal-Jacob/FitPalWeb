@@ -14,12 +14,12 @@ export interface IPost {
   id: string;
   author: string;
   startTime: Date;
-  endTime: Date; 
+  endTime: Date;
   workout: string;
   details: string;
   imageUrl: string;
-  likes: string[]; 
-  comments: IComment[]; 
+  likes: string[];
+  comments: IComment[];
 }
 
 export interface IPostProps {
@@ -73,3 +73,15 @@ interface IWorkoutDay {
 export interface IWorkoutPlanProps {
   days: IWorkoutDay[];
 }
+
+export type WorkoutPlanRequest = {
+  fitnessLevel: "beginner" | "intermediate" | "advanced";
+  goals: string[];
+  availability: number;
+  duration: number;
+  intensity: string;
+  medicalConditions?: string[];
+  preferences?: string[];
+  equipment?: string[];
+};
+ß;

@@ -1,16 +1,22 @@
 import { useState } from "react";
 import {
+  Box,
   Button,
   Card,
   CardContent,
   CardHeader,
+  CircularProgress,
   Grid2 as Grid,
   Typography,
 } from "@mui/material";
 
-import { ISchedule } from "../types";
+import { ISchedule, WorkoutPlanRequest } from "../types";
 import WorkoutPlan from "./WorkoutPlan";
 import ScheduleCard from "./ScheduleCard";
+import api from "../Api";
+import { BACKEND_URL } from "../config";
+import Swal from "sweetalert2";
+import WorkoutPlanModal from "./WorkoutPlanModal";
 
 // const workoutData = {
 //   success: true,
@@ -203,7 +209,7 @@ import ScheduleCard from "./ScheduleCard";
 //   },
 // };
 
-const workoutData = {
+const _workoutData = {
   success: true,
   plan: {
     summary:
@@ -400,70 +406,162 @@ const extractScheduleFromWorkoutData = (workoutData: any): ISchedule[] => {
 };
 
 const WorkoutView: React.FC = () => {
-  const [workout, setWorkout] = useState<string>("");
+  const [workoutData, setWorkoutData] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChangeWorkout = (
-    event: React.ChangeEvent<{ value: unknown } | HTMLInputElement>
-  ) => {
-    const { value } = event.target as HTMLInputElement;
-    setWorkout(value);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleSubmit = (data: WorkoutPlanRequest) => {
+    console.log("Generated Workout Plan:", data);
+    // You can send this data to an API or process it as needed
   };
 
-  return (
-    <Grid
-      container
-      spacing={2}
-      sx={{
-        width: "100%",
-        mx: "auto",
-        p: 2,
-        marginTop: 2,
-      }}
-    >
-      <Grid size={8}>
-        <Card className="bright-background">
-          <CardHeader
-            title={
-              <Typography variant="h5" gutterBottom>
-                Weekly Workout Plan
+  const handleGenerateWorkout = async () => {
+    // Call the backend API to generate a new workout plan
+    setLoading(true);
+    handleOpen();
+
+    const user = localStorage.getItem("myEmail");
+    const response = await (
+      await api.get(`/api/user/findUserByEmail?email=${user}`)
+    ).data;
+
+    console.log(response);
+
+    if (!response) {
+      Swal.fire({
+        icon: "error",
+        title: "User Not Found",
+        text: "The user could not be found. Please try another username.",
+      });
+      return;
+    }
+
+    const userData = response.user;
+    const workoutPlan = (
+      await api.post(`${BACKEND_URL}/api/workout/generate/${user}`)
+    ).data;
+    setWorkoutData(workoutPlan);
+    setLoading(false);
+  };
+
+  if (!workoutData && !loading) {
+    return (
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          width: "100%",
+          mx: "auto",
+          p: 2,
+          marginTop: 2,
+        }}
+      >
+        <Grid size={12}>
+          <Card className="bright-background">
+            <CardContent>
+              <Typography variant="body1" align="center" sx={{ py: 4 }}>
+                No workout plan is available. Generate a new workout plan to get
+                started.
               </Typography>
-            }
-            action={
-              <Button
-                variant="contained"
-                sx={{
-                  "&:focus": {
-                    outline: "none",
-                  },
-                }}
-              >
-                New Workout
-              </Button>
-            }
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: 2,
-            }}
-          />
-          <CardContent id="workout-card">
-            <Grid size={12} id="workout-details">
-              <WorkoutPlan days={workoutData.plan.days} />
-            </Grid>
-          </CardContent>
-        </Card>
+              <Box display="flex" justifyContent="center" sx={{ mt: 2 }}>
+                <Button
+                  variant="contained"
+                  onClick={handleGenerateWorkout}
+                  disabled={loading}
+                >
+                  Generate Workout
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
-      <Grid size={4}>
-        <Grid container spacing={2}>
-          <Grid size={12}>
-            <ScheduleCard
-              schedule={extractScheduleFromWorkoutData(workoutData)}
+    );
+  }
+
+  return (
+    <>
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          width: "100%",
+          mx: "auto",
+          p: 2,
+          marginTop: 2,
+        }}
+      >
+        <Grid size={8}>
+          <Card className="bright-background">
+            <CardHeader
+              title={
+                <Typography variant="h5" gutterBottom>
+                  Weekly Workout Plan
+                </Typography>
+              }
+              action={
+                <Button
+                  variant="contained"
+                  sx={{
+                    "&:focus": {
+                      outline: "none",
+                    },
+                  }}
+                  onClick={() => handleOpen()}
+                >
+                  {loading ? <CircularProgress size={24} /> : "New Workout"}
+                </Button>
+              }
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: 2,
+              }}
             />
+            <CardContent id="workout-card">
+              {workoutData && workoutData.plan && workoutData.plan.days ? (
+                <Grid size={12} id="workout-details">
+                  <WorkoutPlan days={workoutData.plan.days} />
+                </Grid>
+              ) : (
+                <Typography variant="body1" align="center" sx={{ py: 2 }}>
+                  Workout plan details are not available.
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid size={4}>
+          <Grid container spacing={2}>
+            <Grid size={12}>
+              {workoutData ? (
+                <ScheduleCard
+                  schedule={extractScheduleFromWorkoutData(workoutData)}
+                />
+              ) : (
+                <Card className="bright-background">
+                  <CardContent>
+                    <Typography variant="body1" align="center">
+                      Schedule is not available.
+                    </Typography>
+                  </CardContent>
+                </Card>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      <WorkoutPlanModal
+        open={open}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+      />
+    </>
   );
 };
 
