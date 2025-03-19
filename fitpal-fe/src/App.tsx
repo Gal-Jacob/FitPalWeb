@@ -8,7 +8,7 @@ import Messages from "./pages/Messages";
 import NewPost from "./pages/NewPost";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Chatroom from "./pages/Chat";
 import axios from "axios";
 
@@ -39,6 +39,7 @@ const theme = createTheme({
 
 const App: React.FC = () => {
   const navigate = useNavigate();
+  const [image, setImage] = useState<string | null >(null);
 
   useEffect(() => {
     const checkTokenAndFetchProfile = async () => {
@@ -65,6 +66,7 @@ const App: React.FC = () => {
         });
 
         localStorage.setItem(EMAIL_LS, response.data.email);
+        setImage(response.data.image);
       } catch (error) {
         console.error(error);
         localStorage.removeItem("token"); 
@@ -78,7 +80,7 @@ const App: React.FC = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <NavBar />
+        <NavBar image={image} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Home" element={<Home />} />
