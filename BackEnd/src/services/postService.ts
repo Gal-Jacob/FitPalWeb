@@ -1,9 +1,9 @@
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User, { IUser } from './model';
+import User, { IUser } from '../db/models/userModel';
 
-export class UserService {
+export class PostService {
     async findUserById(userId: string) {
         return await User.findById(userId).exec();
     }
