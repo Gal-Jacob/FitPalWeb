@@ -29,18 +29,41 @@ const ChatRoom: React.FC = () => {
         console.log("Connected to WebSocket");
 
         if (chat?.id) {
+            socketRef.current?.emit("joinChat", chat.id)
             socketRef.current?.emit("fetchMessages", chat.id)
         }
       })
     
       socketRef.current.on("chatMessages", (data) => {
         if (data.success) {
-          setMessages(data.messages);
+            const parsedMessages: Message[] = data.messages.map((message: any) => {
+                const senderFinal = message.sendingUser === localStorage.getItem(EMAIL_LS) ? "You" : chat?.name
+            return {
+                text: message.text,
+                sender: senderFinal,
+                }
+            });
+        setMessages(parsedMessages);
         } else {
           console.error(`Error ${data.status}: ${data.error}`)
         }
       })
 
+
+      socketRef.current.on("newMessage", (data) => {
+        if (data.success) {
+            const parsedMessages: Message[] = data.messages.map((message: any) => {
+                const senderFinal = message.sendingUser === localStorage.getItem(EMAIL_LS) ? "You" : chat?.name
+            return {
+                text: message.text,
+                sender: senderFinal,
+                }
+            });
+            setMessages(parsedMessages);
+        } else {
+            console.error(`Error ${data.status}: ${data.error}`)
+        }
+      })
 
     return () => {
       socketRef.current?.disconnect();
@@ -51,14 +74,9 @@ const ChatRoom: React.FC = () => {
     const currentNewMessage = newMessage.trim();
 
     if (currentNewMessage.length > 0) {
-        debugger
         socketRef.current?.emit("sendMessage", chat?.id, currentNewMessage, localStorage.getItem(EMAIL_LS) as string);
-        setMessages([...messages, { text: currentNewMessage, sender: localStorage.getItem(EMAIL_LS) as string }]);
+        // setMessages([...messages, { text: currentNewMessage, sender: "You" }]);
         setNewMessage("");
-    }
-    if (newMessage.trim()) {
-        
-     
     }
   };
 
@@ -128,14 +146,11 @@ const ChatRoom: React.FC = () => {
           }}
         >
           <List>
-            {messages.map((message) => (
-              <ListItem
-                key={message.id}
-                style={{
-                  flexDirection:
-                    message.sender === "You" ? "row-reverse" : "row",
-                }}
-              >
+
+            {messages.map((message, index) => (
+              <ListItem key={index} style={{ flexDirection: message.sender === "You" ? "row-reverse" : "row" }}>
+
+
                 <ListItemText
                   primary={message.text}
                   secondary={message.sender}
