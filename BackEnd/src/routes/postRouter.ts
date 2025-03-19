@@ -33,6 +33,22 @@ postRouter.get('/user', authMiddleware, postController.getUserPosts);
 
 /**
  * @swagger
+ * /api/post/my:
+ *   get:
+ *     summary: Get all posts (optionally filter by user)
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     responses:
+ *       200:
+ *         description: All posts retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+postRouter.get('/my', authMiddleware, postController.getMyPosts);
+
+/**
+ * @swagger
  * /api/post/all:
  *   get:
  *     summary: Get all posts
@@ -47,6 +63,29 @@ postRouter.get('/user', authMiddleware, postController.getUserPosts);
  */
 // postRouter.get('/all', postController.getAllPosts);
 postRouter.get('/all', authMiddleware, postController.getAllPosts);
+
+/**
+ * @swagger
+ * /api/post:
+ *   delete:
+ *     summary: Delete post
+ *     tags: [Post]
+ *     security:
+ *       - BearerAuth: [] 
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: post id to delete
+ *     responses:
+ *       200:
+ *         description: Post deleted successfully
+ *       401:
+ *         description: Unauthorized
+ */
+postRouter.delete('', authMiddleware, postController.deletePost);
 
 /**
  * @swagger

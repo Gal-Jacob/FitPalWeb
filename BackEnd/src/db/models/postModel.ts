@@ -9,6 +9,7 @@ export interface IComment {
 export interface IPost extends Document {
     id: string;
     author: string;
+    email: string;
     startTime: Date;
     endTime: Date; 
     workout: string;
@@ -26,6 +27,7 @@ const postSchema: Schema<IPost> = new Schema({
         trim: true,
     },
     author: { type: String, required: true },
+    email: { type: String, required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     workout: { type: String, required: true },

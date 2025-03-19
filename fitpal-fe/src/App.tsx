@@ -15,13 +15,13 @@ import axios from "axios";
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-import { TOKEN_LS } from "./config";
+import { EMAIL_LS, TOKEN_LS } from "./config";
 import api from "./Api";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#8179f3", 
+      main: "#8179f3",
     },
     secondary: {
       main: "#03a9f4",
@@ -41,29 +41,38 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      const params = new URLSearchParams(window.location.search);
-      const token = params.get("token");
-      if (token) {
-        localStorage.setItem("token", token as string);
+    const checkTokenAndFetchProfile = async () => {
+      const token =
+        localStorage.getItem("token") ||
+        new URLSearchParams(window.location.search).get("token");
+
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      if (!localStorage.getItem("token") && token) {
+        localStorage.setItem("token", token);
         navigate("/");
-      } else {
-        navigate("/login")
-      }
-    } else {
-      const fetchUserProfile = async () => {
-        try { 
-          console.log( `Bearer ${localStorage.getItem("token")}`)
-          const response = await api.get(`${BACKEND_URL}/api/user/profile`)
-
-          console.log(response)
-        } catch (error) {
-          console.log(error)
-        }
+        return;
       }
 
-      fetchUserProfile()
-    }
+      try {
+        const response = await api.get(`${BACKEND_URL}/api/user/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        localStorage.setItem(EMAIL_LS, response.data.email);
+      } catch (error) {
+        console.error(error);
+        localStorage.removeItem("token");
+        navigate("/login");
+      }
+    };
+
+    checkTokenAndFetchProfile();
   }, [navigate]);
 
   return (
