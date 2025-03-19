@@ -15,7 +15,7 @@ import axios from "axios";
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-import { EMAIL_LS, TOKEN_LS } from "./config";
+import { TOKEN_LS, EMAIL_LS } from "./config";
 import api from "./Api";
 
 const theme = createTheme({
