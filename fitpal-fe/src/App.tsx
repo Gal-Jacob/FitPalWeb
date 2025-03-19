@@ -10,10 +10,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
 import { useEffect } from "react";
 import Chatroom from "./pages/Chat";
-import axios from "axios";
 
 export const BACKEND_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
 
 import { TOKEN_LS, EMAIL_LS } from "./config";
 import api from "./Api";
@@ -21,7 +20,7 @@ import api from "./Api";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#8179f3", 
+      main: "#8179f3",
     },
     secondary: {
       main: "#03a9f4",
@@ -42,21 +41,21 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const checkTokenAndFetchProfile = async () => {
-      const token = localStorage.getItem("token") || new URLSearchParams(window.location.search).get("token");
+      const token =
+        localStorage.getItem("token") ||
+        new URLSearchParams(window.location.search).get("token");
 
       if (!token) {
         navigate("/login");
         return;
       }
 
-      
       if (!localStorage.getItem("token") && token) {
         localStorage.setItem("token", token);
-        navigate("/"); 
+        navigate("/");
         return;
       }
 
-      
       try {
         const response = await api.get(`${BACKEND_URL}/api/user/profile`, {
           headers: {
@@ -67,8 +66,8 @@ const App: React.FC = () => {
         localStorage.setItem(EMAIL_LS, response.data.email);
       } catch (error) {
         console.error(error);
-        localStorage.removeItem("token"); 
-        navigate("/login"); 
+        localStorage.removeItem("token");
+        navigate("/login");
       }
     };
 
