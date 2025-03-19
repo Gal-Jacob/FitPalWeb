@@ -9,6 +9,7 @@
     "dev": "ts-node-dev src/app.ts"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
