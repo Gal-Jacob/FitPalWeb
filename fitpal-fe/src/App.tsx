@@ -12,7 +12,8 @@ import { useEffect } from "react";
 import Chatroom from "./pages/Chat";
 import axios from "axios";
 
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+export const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const theme = createTheme({
   palette: {
@@ -71,7 +72,7 @@ const App: React.FC = () => {
           <Route path="/Home" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/EditProfile" element={<EditProfile />} />
-          <Route path="/Login" element={<AuthPages  />} />
+          <Route path="/Login" element={<AuthPages />} />
           <Route path="/Messages" element={<Messages />} />
           <Route path="/NewPost" element={<NewPost />} />
           <Route path="/chat/:chatId" element={<Chatroom />} />
@@ -79,6 +80,6 @@ const App: React.FC = () => {
       </ThemeProvider>
     </>
   );
-}
+};
 
 export default App;

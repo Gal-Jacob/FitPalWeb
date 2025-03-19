@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
 import passport from 'passport';
-import UserController from './controller';
-import authMiddleware from './middleware';
+import UserController from '../controllers/userController';
+import authMiddleware from '../utils/authMiddleware';
 
-const router = Router();
+const userRouter = Router();
 const userController = new UserController();
 
 /**
@@ -21,7 +21,7 @@ const userController = new UserController();
  *       401:
  *         description: Unauthorized
  */
-router.get('/profile', authMiddleware, userController.getUserProfile);
+userRouter.get('/profile', authMiddleware, userController.getUserProfile);
 
 /**
  * @swagger
@@ -48,7 +48,7 @@ router.get('/profile', authMiddleware, userController.getUserProfile);
  *       401:
  *         description: Unauthorized
  */
-router.put('/profile', authMiddleware, userController.updateUserProfile);
+userRouter.put('/profile', authMiddleware, userController.updateUserProfile);
 
 /**
  * @swagger
@@ -77,7 +77,7 @@ router.put('/profile', authMiddleware, userController.updateUserProfile);
  *       400:
  *         description: Bad request
  */
-router.post('/register', userController.registerUser);
+userRouter.post('/register', userController.registerUser);
 
 /**
  * @swagger
@@ -102,7 +102,7 @@ router.post('/register', userController.registerUser);
  *       400:
  *         description: Bad request
  */
-router.post('/login', userController.loginUser);
+userRouter.post('/login', userController.loginUser);
 
 
 /**
@@ -117,7 +117,7 @@ router.post('/login', userController.loginUser);
  *       400:
  *         description: Bad request
  */
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+userRouter.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 /**
  * @swagger
@@ -131,7 +131,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  *       400:
  *         description: Bad request
  */
-router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
+userRouter.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
 (req, res) => {
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
   const token = req.user ? (req.user as any).accessToken : null; 
@@ -145,4 +145,4 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 );
 
 
-export default router;
+export default userRouter;

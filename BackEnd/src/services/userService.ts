@@ -1,7 +1,7 @@
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User, { IUser } from './model';
+import User, { IUser } from '../db/models/userModel';
 
 export class UserService {
     async findUserById(userId: string) {
