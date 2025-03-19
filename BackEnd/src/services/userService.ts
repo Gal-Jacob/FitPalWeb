@@ -46,6 +46,10 @@ export class UserService {
     await user.save();
     return user;
   }
+  
+  async findUserByEmail(email: string) {
+      return await User.findOne({ email }).exec();
+  }
 
   async login(userData: any): Promise<string> {
     const { email, password } = userData;

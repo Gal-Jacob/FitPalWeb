@@ -2,17 +2,16 @@ import mongoose, { Document, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface IUser extends Document {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  googleId?: string;
-  accessToken?: string;
-  refreshToken?: string;
-  lastWorkoutGenerated?: Date;
-  workout: Object;
-  preferences: Object;
-  comparePassword: (password: string) => Promise<boolean>;
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    googleId?: string;
+    accessToken?: string;
+    refreshToken?: string;
+    lastWorkoutGenerated?: Date;
+    workout?: object;
+    comparePassword: (password: string) => Promise<boolean>;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -48,20 +47,14 @@ const userSchema: Schema<IUser> = new Schema(
       trim: true,
     },
     lastWorkoutGenerated: {
-      type: Date,
-    },
-    workout: {
-      type: Object,
-      default: {},
-    },
 
-    preferences: {
-      type: Object,
-      default: {},
+        type: Date,
     },
-  },
-  { timestamps: true }
-);
+    workout: { 
+        type: Object,
+    }
+
+}, { timestamps: true });
 
 userSchema.methods.comparePassword = async function (
   password: string
