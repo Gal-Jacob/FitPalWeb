@@ -9,19 +9,21 @@ import NewPost from "./pages/NewPost";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
 import { useEffect } from "react";
+import Chatroom from "./pages/Chat";
+import axios from "axios";
 
 export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#8179f3", // Change this to your desired primary color
+      main: "#8179f3", 
     },
     secondary: {
-      main: "#03a9f4", // Change this to your desired secondary color
+      main: "#03a9f4",
     },
     background: {
-      default: "#f5f5f5", // Change background color
+      default: "#f5f5f5",
       paper: "#ffffff",
     },
     text: {
@@ -35,15 +37,31 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
+    if (!localStorage.getItem("token")) {
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("token");
+      if (token) {
+        localStorage.setItem("token", token as string);
+        navigate("/");
+      } else {
+        navigate("/login")
+      }
+    } else {
+      const fetchUserProfile = async () => {
+        try { 
+          console.log( `Bearer ${localStorage.getItem("token")}`)
+          const response = await axios.get(`${BACKEND_URL}/api/user/profile`, { headers: {  Authorization: `Bearer ${localStorage.getItem("token")}`} })
 
-    if (token) {
-      localStorage.setItem('token', token);
+          console.log(response)
+        } catch (error) {
+          console.log(error)
+        }
+      }
 
-      navigate('/');
+      fetchUserProfile()
     }
   }, [navigate]);
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -56,6 +74,7 @@ const App: React.FC = () => {
           <Route path="/Login" element={<AuthPages  />} />
           <Route path="/Messages" element={<Messages />} />
           <Route path="/NewPost" element={<NewPost />} />
+          <Route path="/chat/:chatId" element={<Chatroom />} />
         </Routes>
       </ThemeProvider>
     </>

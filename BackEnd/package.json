@@ -9,26 +9,32 @@
     "dev": "ts-node-dev src/app.ts"
   },
   "dependencies": {
+    "@types/swagger-ui-express": "^4.1.8",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.8",
+    "@types/express-session": "^1.18.1",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.10.2",
     "@types/morgan": "^1.9.9",
     "@types/passport": "^1.0.0",
     "@types/passport-google-oauth20": "^2.0.0",
+    "@types/swagger-jsdoc": "^6.0.4",
     "morgan": "^1.10.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^1.1.8",
