@@ -16,7 +16,6 @@ import {
 import NewPostButton from "../components/newPostButton/NewPostButton";
 import Post from "../components/Post";
 import { IPost } from "../types";
-import Post from "../components/Post";
 import { BACKEND_URL } from "../config";
 import api from "../Api";
 import { isAxiosError } from "axios";
@@ -77,4 +76,3 @@ export default function Home() {
     </>
   );
 };
-export default Home;

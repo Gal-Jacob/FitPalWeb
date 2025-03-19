@@ -43,6 +43,16 @@ connectDB();
 app.use(passport.initialize());
 
 
+app.use(expressSession({
+    secret: process.env.SESSION_SECRET || 'your-secret-key', 
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/api/user', userRouter);
 app.use('/api/post', postRouter);
 

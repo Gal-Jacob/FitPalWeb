@@ -20,6 +20,10 @@ export class UserService {
         return null;
     }
 
+    async findUserByEmail(email: string) {
+        return await User.findOne({ email }).exec();
+    }
+
     generateToken(user: IUser): string {
         const payload = { id: user._id, email: user.email };
         return jwt.sign(payload, process.env.JWT_SECRET || '', { expiresIn: '1h' });
