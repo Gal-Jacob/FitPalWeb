@@ -23,7 +23,10 @@ export const BACKEND_URL = `http://localhost:${PORT}`
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
+<<<<<<< HEAD
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+=======
+>>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
     credentials: true,
   })
 );

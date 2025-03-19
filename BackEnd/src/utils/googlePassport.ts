@@ -34,9 +34,12 @@ passport.use(
       } catch (error) {
         return done(error, false);
       }
+      return done(null, user);
+    } catch (error) {
+      return done(error, false);
     }
-  )
-);
+  }
+));
 
 passport.serializeUser((user, done) => {
   done(null, user);

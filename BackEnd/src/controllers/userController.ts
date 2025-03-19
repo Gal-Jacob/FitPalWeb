@@ -124,6 +124,22 @@ class UserController {
         }
     };
 
+<<<<<<< HEAD
+=======
+    public searchUsersByEmail = async (req: Request, res: Response) => {
+        try {
+            const { email } = req.query;
+            if (!email || typeof email !== 'string') {
+                return res.status(400).json({ message: 'Invalid email query parameter' });
+            }
+            
+            const users = await this.userService.findUserByEmail(email);
+            return res.status(200).json(users);
+        } catch (error) {
+            return res.status(500).json({ message: 'Server error', error });
+        }
+    };
+>>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
 }
 
 export default UserController;

@@ -237,4 +237,28 @@ userRouter.get('/google/callback', passport.authenticate('google', { failureRedi
 );
 
 
+/**
+ * @swagger
+ * /api/user/findUserByEmail:
+ *   get:
+ *     summary: find user in db with email given email
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The email of the user to search for.
+ *     responses:
+ *       200:
+ *         description: User authenticated successfully
+ *       400:
+ *         description: Bad request
+ */
+userRouter.get('/findUserByEmail', authMiddleware, (req, res) => {
+  userController.searchUsersByEmail(req, res);
+});
+
+
 export default userRouter;
