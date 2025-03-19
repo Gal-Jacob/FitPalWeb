@@ -52,27 +52,6 @@ interface IPostProps {
   props: IPost;
 }
 
-const TEMP_COMMENTS: IComment[] = [
-  { author: "Alice", comment: "This is amazing!" },
-  { author: "Bob", comment: "Great job, keep it up!" },
-  { author: "Charlie", comment: "I have a question about this." },
-  { author: "Diana", comment: "Really insightful, thanks for sharing." },
-  { author: "Ethan", comment: "Could you provide more details?" },
-  { author: "Fiona", comment: "I completely agree with you." },
-  { author: "George", comment: "This helped me a lot, thank you!" },
-  { author: "Hannah", comment: "I’m not sure I understand, can you clarify?" },
-  { author: "Ian", comment: "This is exactly what I was looking for!" },
-  { author: "Julia", comment: "Awesome work, well done!" },
-  {
-    author: "Kevin",
-    comment: "Interesting perspective, I hadn't thought of that.",
-  },
-  { author: "Laura", comment: "Where did you find this information?" },
-  { author: "Mike", comment: "I appreciate your hard work on this." },
-  { author: "Nina", comment: "Can you share more examples?" },
-  { author: "Oscar", comment: "This makes so much sense, thanks!" },
-];
-
 const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
   postId,
   closeModal,
@@ -146,7 +125,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
           <Container sx={{ overflowY: "auto", height: 450 }}>
             {comments?.map((c: IComment, i) => {
               return (
-                <Grid2 container>
+                <Grid2 container key={i}>
                   <Grid2 size={1}>
                     <Avatar
                       sx={{
@@ -188,7 +167,7 @@ const PostCommentsModal: React.FC<IPostCommentsModalProps> = ({
               sx={{ width: "100%" }}
               label="add comment"
               variant="outlined"
-              fullwidth
+              fullWidth
               value={addComment}
               onChange={handleOnChangeComment}
             />
@@ -212,7 +191,7 @@ const LikeButton: React.FC<IPostProps> = ({ props }) => {
   const handleOnLikeClick = () => {
     api
       .put(`${BACKEND_URL}/api/post/like`, {
-        postId: "67da401573652e360df14cb0",
+        postId: props._id,
       })
       .then((res) => {
         setLikes(res.data.users.length);

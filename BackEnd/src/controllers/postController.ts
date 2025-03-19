@@ -78,10 +78,12 @@ class PostController {
     public handleLike = async (req: Request | any, res: Response) => {
         try {            
             let {postId} = req.body
-            if (req.user.user_id) {
-                console.log(req.user.user_id);
-                const userId: string = req.user.user_id; 
-                return res.status(201).json(await this.postService.likePost(userId, postId));
+            console.log(req.user);
+            
+            if (req.user.email) {
+                console.log(req.user.email);
+                const email: string = req.user.email; 
+                return res.status(201).json(await this.postService.likePost(email, postId));
             }
 
         } catch (error) {
@@ -94,6 +96,7 @@ class PostController {
             }
         }
     };
+
     public getPostsComments = async (req: Request | any, res: Response) => {
         try {        
 
@@ -117,12 +120,10 @@ class PostController {
     public handleNewComment = async (req: Request | any, res: Response) => {
         try {            
             let {postId, comment} = req.body
-            console.log(req.user);
             if (req.user.email) {
                 const email: string = req.user.email; 
                 return res.status(201).json(await this.postService.handleNewComment(email, comment, postId));
             }
-
         } catch (error) {
 
             if (error instanceof Error) {

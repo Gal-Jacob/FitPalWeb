@@ -24,17 +24,17 @@ export class PostService {
           } 
       };
 
-    async likePost(userId: string, postId: string) {
+    async likePost(email: string, postId: string) {
 
         const post = await Post.findById(postId);
         if (post) {
-            const alreadyLiked = post.likes.includes(userId);
+            const alreadyLiked = post.likes.includes(email);
             if (alreadyLiked) {
               // Unlike post
-              post.likes = post.likes.filter((id) => id.toString() !== userId);
+              post.likes = post.likes.filter((id) => id.toString() !== email);
             } else {
               // Like post
-              post.likes.push(userId);
+              post.likes.push(email);
             }
         
             await post.save();
