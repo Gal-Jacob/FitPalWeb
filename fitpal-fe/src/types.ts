@@ -1,6 +1,6 @@
 export interface IComment {
-  owner: string;
-  text: string;
+  author: string;
+  comment: string;
 }
 
 export interface ICommentsModalProps {
@@ -10,6 +10,7 @@ export interface ICommentsModalProps {
 }
 
 export interface IPost {
+  _id: string;
   id: string;
   author: string;
   startTime: Date;
@@ -18,7 +19,7 @@ export interface IPost {
   details: string;
   imageUrl: string;
   likes: string[]; 
-  comments: { author: string; comment: string }[]; 
+  comments: IComment[]; 
 }
 
 export interface IPostProps {

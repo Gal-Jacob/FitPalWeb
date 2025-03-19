@@ -23,6 +23,7 @@ import Badge, { badgeClasses } from "@mui/material/Badge";
 import api from "../Api";
 import { BACKEND_URL } from "../config";
 import { isAxiosError } from "axios";
+import Swal from "sweetalert2";
 import { ChatBubbleOutlineRounded } from "@mui/icons-material";
 import CommentsModal from "./CommentsModal";
 
@@ -38,8 +39,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  height: 400,
+  width: 600,
+  height: 600,
   bgcolor: "background.paper",
   borderRadius: "5px",
   boxShadow: 24,
@@ -50,34 +51,14 @@ interface IPostProps {
   props: IPost;
 }
 
-const TEMP_COMMENTS: IComment[] = [
-  { owner: "Alice", text: "This is amazing!" },
-  { owner: "Bob", text: "Great job, keep it up!" },
-  { owner: "Charlie", text: "I have a question about this." },
-  { owner: "Diana", text: "Really insightful, thanks for sharing." },
-  { owner: "Ethan", text: "Could you provide more details?" },
-  { owner: "Fiona", text: "I completely agree with you." },
-  { owner: "George", text: "This helped me a lot, thank you!" },
-  { owner: "Hannah", text: "I’m not sure I understand, can you clarify?" },
-  { owner: "Ian", text: "This is exactly what I was looking for!" },
-  { owner: "Julia", text: "Awesome work, well done!" },
-  {
-    owner: "Kevin",
-    text: "Interesting perspective, I hadn't thought of that.",
-  },
-  { owner: "Laura", text: "Where did you find this information?" },
-  { owner: "Mike", text: "I appreciate your hard work on this." },
-  { owner: "Nina", text: "Can you share more examples?" },
-  { owner: "Oscar", text: "This makes so much sense, thanks!" },
-];
-
 const PostCommentsModal: React.FC<ICommentsModalProps> = ({
   postId,
   closeModal,
   isOpen,
 }) => {
-  const [comments, setComments] = useState<IComment[]>();
+  const [comments, setComments] = useState<IComment[]>([]);
   const [addComment, setAddComment] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(Boolean);
 
   const handleOnChangeComment = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -85,9 +66,46 @@ const PostCommentsModal: React.FC<ICommentsModalProps> = ({
     setAddComment(event.target.value);
   };
 
+  const handlePostComment = (event: React.ChangeEvent<HTMLInputElement>) => {
+    api
+      .put(`${BACKEND_URL}/api/post/comments`, {
+        postId: postId,
+        comment: addComment,
+      })
+      .then((res) => {
+        setComments(res.data.comments);
+        setAddComment("");
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: `Something went wrong while adding the post. Error: ${error.message}`,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
-    //TODO: Load comments
-    setComments(TEMP_COMMENTS);
+    api
+      .get(`${BACKEND_URL}/api/post/comments?postId=${postId}`)
+      .then((res) => {
+        setComments(res.data.comments);
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: `Something went wrong while adding the post. Error: ${error.message}`,
+          icon: "error",
+          confirmButtonText: "Try Again",
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -98,15 +116,15 @@ const PostCommentsModal: React.FC<ICommentsModalProps> = ({
             variant="h5"
             sx={{
               marginBottom: 0,
-              padding: "20px 20px 0px 20px",
+              padding: "10px 20px 0px 20px",
             }}
           >
             Comments
           </Typography>
-          <Container sx={{ overflowY: "auto", height: 240 }}>
-            {comments?.map((comment, i) => {
+          <Container sx={{ overflowY: "auto", height: 450 }}>
+            {comments?.map((c: IComment, i) => {
               return (
-                <Grid2 container>
+                <Grid2 container key={i}>
                   <Grid2 size={1}>
                     <Avatar
                       sx={{
@@ -128,8 +146,7 @@ const PostCommentsModal: React.FC<ICommentsModalProps> = ({
                       component="h2"
                       sx={{ marginBottom: 1.25 }}
                     >
-                      <b>{comment.owner}</b>
-                      {comment.text}
+                      <b>{c.author}</b> {c.comment}
                     </Typography>
                   </Grid2>
                 </Grid2>
@@ -149,11 +166,15 @@ const PostCommentsModal: React.FC<ICommentsModalProps> = ({
               sx={{ width: "100%" }}
               label="add comment"
               variant="outlined"
-              fullwidth
+              fullWidth
               value={addComment}
               onChange={handleOnChangeComment}
             />
-            <IconButton variant="contained" color="secondary">
+            <IconButton
+              variant="contained"
+              color="secondary"
+              onClick={handlePostComment}
+            >
               <SendIcon />
             </IconButton>
           </div>
@@ -169,7 +190,7 @@ const LikeButton: React.FC<IPostProps> = ({ props }) => {
   const handleOnLikeClick = () => {
     api
       .put(`${BACKEND_URL}/api/post/like`, {
-        postId: "67da401573652e360df14cb0",
+        postId: props._id,
       })
       .then((res) => {
         setLikes(res.data.users.length);
@@ -208,14 +229,18 @@ const Post: React.FC<IPostProps> = ({ props }) => {
 
   return (
     <>
-      <Container sx={{ mt: 4, width: 500 }}>
+      <Container sx={{ mt: 4, width: 700 }}>
         <Typography variant="body1" gutterBottom>
           {props.author}
         </Typography>
-        <Card sx={{ maxWidth: 400, mx: "auto", p: 2 }}>
+        <Card sx={{ maxWidth: 650, mx: "auto", p: 2 }}>
           <CardContent>
             {props.imageUrl ? (
-              <img src={props.imageUrl} alt="Dynamic image" />
+              <img
+                src={props.imageUrl}
+                alt="Dynamic image"
+                style={{ width: "300px", height: "300px" }}
+              />
             ) : (
               <Avatar
                 sx={{
@@ -268,10 +293,10 @@ const Post: React.FC<IPostProps> = ({ props }) => {
           </CardContent>
         </Card>
       </Container>
-      <CommentsModal
+      <PostCommentsModal
         isOpen={isCommentModalopen}
         closeModal={handleCloseCommentModal}
-        postId={props.id}
+        postId={props._id}
       />
     </>
   );

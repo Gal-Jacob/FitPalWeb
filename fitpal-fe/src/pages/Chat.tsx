@@ -1,9 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { AppBar, Toolbar, Typography, IconButton, TextField, Button, List, ListItem, ListItemText, Paper, Box, Avatar } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { io, Socket } from "socket.io-client"; 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  TextField,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  Box,
+  Avatar,
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { io, Socket } from "socket.io-client";
 
 interface Message {
   id: string;
@@ -11,35 +24,36 @@ interface Message {
   sender: string;
 }
 
-export const WEB_SOCKET_URL = process.env.VITE_WSS_URL || "http://localhost:8000";
+export const WEB_SOCKET_URL =
+  import.meta.env.VITE_WSS_URL || "http://localhost:8000";
 
 const ChatRoom: React.FC = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { chat } = location.state || {}
-  const [messages, setMessages] = useState<Message[]>([])
-  const [newMessage, setNewMessage] = useState<string>("")
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { chat } = location.state || {};
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
 
-  const socketRef = useRef<Socket | null>(null)
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io(WEB_SOCKET_URL)
+    socketRef.current = io(WEB_SOCKET_URL);
 
     socketRef.current.on("connect", () => {
-        console.log("Connected to WebSocket");
-        
-        if (chat?.id) {
-          socketRef.current?.emit("fetchMessages", chat.id)
-        }
-      })
-    
-      socketRef.current.on("chatMessages", (data) => {
-        if (data.success) {
-          setMessages(data.messages);
-        } else {
-          console.error(`Error ${data.status}: ${data.error}`)
-        }
-      })
+      console.log("Connected to WebSocket");
+
+      if (chat?.id) {
+        socketRef.current?.emit("fetchMessages", chat.id);
+      }
+    });
+
+    socketRef.current.on("chatMessages", (data) => {
+      if (data.success) {
+        setMessages(data.messages);
+      } else {
+        console.error(`Error ${data.status}: ${data.error}`);
+      }
+    });
 
     return () => {
       socketRef.current?.disconnect();
@@ -70,43 +84,46 @@ const ChatRoom: React.FC = () => {
   };
 
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '100vh', 
-        padding: 2 
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        padding: 2,
       }}
     >
-      <Paper 
-        elevation={3} 
-        sx={{ 
-          width: '1200px',
-          height: '75vh',     
-          display: 'flex', 
-          flexDirection: 'column', 
-          justifyContent: 'space-between', 
-          padding: 0, 
+      <Paper
+        elevation={3}
+        sx={{
+          width: "1200px",
+          height: "75vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: 0,
         }}
       >
-        <Paper 
-          style={{ 
-            display: 'flex', 
-            backgroundColor: '#8179f3', 
+        <Paper
+          style={{
+            display: "flex",
+            backgroundColor: "#8179f3",
             paddingLeft: 10,
-            paddingRight: 10, 
-            paddingTop: 20, 
+            paddingRight: 10,
+            paddingTop: 20,
             paddingBottom: 20,
-            alignItems: 'center', 
-            justifyContent: 'space-between' 
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          <div style={{ display: 'flex' }}> 
-            <Avatar sx={{ height: '56px', width: '56px' }}>
+          <div style={{ display: "flex" }}>
+            <Avatar sx={{ height: "56px", width: "56px" }}>
               {chat?.name.charAt(0).toUpperCase()}
             </Avatar>
-            <Typography variant="h3" sx={{ textAlign: 'center', marginLeft: '20px', color: "white" }}>
+            <Typography
+              variant="h3"
+              sx={{ textAlign: "center", marginLeft: "20px", color: "white" }}
+            >
               {chat?.name || "No Chat Selected"}
             </Typography>
           </div>
@@ -115,24 +132,30 @@ const ChatRoom: React.FC = () => {
           </IconButton>
         </Paper>
 
-        <div 
-          style={{ 
-            flexGrow: 1, 
-            overflowY: 'auto', 
-            marginBottom: 10, 
-            padding: '10px'
+        <div
+          style={{
+            flexGrow: 1,
+            overflowY: "auto",
+            marginBottom: 10,
+            padding: "10px",
           }}
         >
           <List>
             {messages.map((message) => (
-              <ListItem key={message.id} style={{ flexDirection: message.sender === "You" ? "row-reverse" : "row" }}>
+              <ListItem
+                key={message.id}
+                style={{
+                  flexDirection:
+                    message.sender === "You" ? "row-reverse" : "row",
+                }}
+              >
                 <ListItemText
                   primary={message.text}
                   secondary={message.sender}
                   sx={{
                     textAlign: message.sender === "You" ? "right" : "left",
                     maxWidth: "70%",
-                    margin: "5px 0"
+                    margin: "5px 0",
                   }}
                 />
               </ListItem>
@@ -140,7 +163,7 @@ const ChatRoom: React.FC = () => {
           </List>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", padding: '10px' }}>
+        <div style={{ display: "flex", alignItems: "center", padding: "10px" }}>
           <TextField
             variant="outlined"
             fullWidth
@@ -149,7 +172,11 @@ const ChatRoom: React.FC = () => {
             placeholder="Type a message..."
             sx={{ marginRight: 2 }}
           />
-          <Button variant="contained" color="primary" onClick={handleSendMessage}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSendMessage}
+          >
             Send
           </Button>
         </div>

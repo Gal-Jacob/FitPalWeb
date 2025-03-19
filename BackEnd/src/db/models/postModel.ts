@@ -1,6 +1,11 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 
+export interface IComment {
+    author: string;
+    comment: string;
+}
+
 export interface IPost extends Document {
     id: string;
     author: string;
@@ -10,7 +15,7 @@ export interface IPost extends Document {
     details: string;
     imageUrl: string;
     likes: string[]; 
-    comments: { author: string; comment: string }[]; 
+    comments: IComment[]; 
 }
 
 const postSchema: Schema<IPost> = new Schema({
