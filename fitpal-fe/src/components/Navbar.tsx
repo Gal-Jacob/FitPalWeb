@@ -28,7 +28,7 @@ const settings: IPage[] = [
   { name: "Logout", uri: "Login" },
 ];
 
-function NavBar() {
+const NavBar = () => {
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -119,5 +119,5 @@ function NavBar() {
       </Container>
     </AppBar>
   );
-}
+};
 export default NavBar;

@@ -14,9 +14,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import NewPostButton from "../components/newPostButton/NewPostButton";
-import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
-import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
+import Post from "../components/Post";
 import { IPost } from "../types";
 import Post from "../components/Post";
 import { BACKEND_URL } from "../config";
@@ -78,4 +76,5 @@ export default function Home() {
       <NewPostButton />
     </>
   );
-}
+};
+export default Home;

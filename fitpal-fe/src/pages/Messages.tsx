@@ -1,15 +1,6 @@
-import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Container,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Typography, Container, Card, CardContent } from "@mui/material";
 
-export default function Messages() {
+const Messages = () => {
   return (
     <div>
       <Container sx={{ mt: 4 }}>
@@ -23,4 +14,6 @@ export default function Messages() {
       </Container>
     </div>
   );
-}
+};
+
+export default Messages;

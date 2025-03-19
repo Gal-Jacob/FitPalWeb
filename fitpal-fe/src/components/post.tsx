@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
-  Button,
   Container,
   Card,
   CardContent,
   Box,
-  IconButton,
   Avatar,
   Modal,
   Grid2,
@@ -284,13 +280,13 @@ const Post: React.FC<IPostProps> = ({ props }) => {
                 aria-label="comment"
                 onClick={handleOpenCommentModal}
               >
-                <ChatBubbleOutlineRoundedIcon />
-              </IconButton>
+                <ChatBubbleOutlineRounded />
+              </CustomIconButton>
             </Box>
           </CardContent>
         </Card>
       </Container>
-      <PostCommentsModal
+      <CommentsModal
         isOpen={isCommentModalopen}
         closeModal={handleCloseCommentModal}
         postId={props._id}

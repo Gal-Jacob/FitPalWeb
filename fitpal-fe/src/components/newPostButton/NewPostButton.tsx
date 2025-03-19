@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "./NewPostButton.css";
 
-export default function NewPostButton() {
+const NewPostButton = () => {
   const navigate = useNavigate();
 
   const handleOnClick = () => {
@@ -15,4 +15,6 @@ export default function NewPostButton() {
       New Post
     </Button>
   );
-}
+};
+
+export default NewPostButton;
