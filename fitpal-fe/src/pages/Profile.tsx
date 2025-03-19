@@ -27,7 +27,7 @@ const Profile: React.FC = () => {
     gender: "",
     height: "",
     whight: "",
-    photo: "",
+    image: "",
   });
   const [view, setView] = React.useState<"workout" | "posts">("workout");
 
@@ -48,8 +48,10 @@ const Profile: React.FC = () => {
           gender: response.data.gender || "",
           height: response.data.height || "",
           whight: response.data.weight || "", 
-          photo: response.data.photo || "",
+          image: response.data.image || "",
         });
+
+
       } catch (error) {
         console.error("Error fetching user profile:", error);
         alert("Failed to fetch user profile. Please try again.");
@@ -90,9 +92,9 @@ const Profile: React.FC = () => {
             height: 150,
             backgroundColor: "#4343f054",
           }}
-          src={userProfile.photo ? `${BACKEND_URL}/${userProfile.photo}` : undefined}
+          src={userProfile.image || undefined}
         >
-          {!userProfile.photo && (
+          {!userProfile.image && (
             <InsertPhoto sx={{ width: 80, height: 80, color: "white" }} />
           )}
         </Avatar>
