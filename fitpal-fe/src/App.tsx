@@ -16,7 +16,10 @@ export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 import { EMAIL_LS, TOKEN_LS } from "./config";
+<<<<<<< HEAD
+=======
 import { TOKEN_LS, EMAIL_LS } from "./config";
+>>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
 import api from "./Api";
 
 const theme = createTheme({
@@ -42,12 +45,28 @@ const App: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+<<<<<<< HEAD
+    const checkTokenAndFetchProfile = async () => {
+=======
       const checkTokenAndFetchProfile = async () => {
+>>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
       const token = localStorage.getItem("token") || new URLSearchParams(window.location.search).get("token");
 
       if (!token) {
         navigate("/login");
         return;
+<<<<<<< HEAD
+      }
+
+      
+      if (!localStorage.getItem("token") && token) {
+        localStorage.setItem("token", token);
+        navigate("/"); 
+        return;
+      }
+
+      
+=======
       }
 
       if (!localStorage.getItem("token") && token) {
@@ -56,6 +75,7 @@ const App: React.FC = () => {
         return;
       }
 
+>>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
       try {
         const response = await api.get(`${BACKEND_URL}/api/user/profile`, {
           headers: {
@@ -66,8 +86,13 @@ const App: React.FC = () => {
         localStorage.setItem(EMAIL_LS, response.data.email);
       } catch (error) {
         console.error(error);
+<<<<<<< HEAD
+        localStorage.removeItem("token"); 
+        navigate("/login"); 
+=======
         localStorage.removeItem("token");
         navigate("/login");
+>>>>>>> 182363086e1d3072766c599e5155595aec3ab5fb
       }
     };
 

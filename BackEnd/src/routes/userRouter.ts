@@ -3,6 +3,7 @@ import { Router } from 'express';
 import passport from 'passport';
 import UserController from '../controllers/userController';
 import authMiddleware from '../utils/authMiddleware';
+import multerUpload from '../utils/multerFilesUpload';
 
 const userRouter = Router();
 const userController = new UserController();
@@ -49,6 +50,97 @@ userRouter.get('/profile', authMiddleware, userController.getUserProfile);
  *         description: Unauthorized
  */
 userRouter.put('/profile', authMiddleware, userController.updateUserProfile);
+
+/**
+ * @swagger
+ * /api/user/profile:
+ *   patch:
+ *     summary: Partially update user profile
+ *     tags: [User]
+ *     security:
+ *       - BearerAuth: [] 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The user's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name
+ *               height:
+ *                 type: integer
+ *                 description: The user's height in cm
+ *               weight:
+ *                 type: integer
+ *                 description: The user's weight in kg
+ *     responses:
+ *       200:
+ *         description: User profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 firstName:
+ *                   type: string
+ *                 lastName:
+ *                   type: string
+ *                 height:
+ *                   type: integer
+ *                 weight:
+ *                   type: integer
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+userRouter.patch('/profile', authMiddleware, userController.patchUserProfile);
+
+/**
+ * @swagger
+ * /api/user/profile/photo:
+ *   patch:
+ *     summary: Update user profile photo
+ *     tags: [User]
+ *     security:
+ *       - BearerAuth: [] 
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               photo:
+ *                 type: string
+ *                 format: binary
+ *                 description: The photo file to upload
+ *     responses:
+ *       200:
+ *         description: User profile photo updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 photo:
+ *                   type: string
+ *                   description: The URL or path of the updated photo
+ *       400:
+ *         description: No photo uploaded
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+userRouter.patch('/profile/photo', authMiddleware, multerUpload.single('image'), userController.patchUserPhoto);
 
 /**
  * @swagger

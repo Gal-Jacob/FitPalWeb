@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Typography,
@@ -14,20 +14,50 @@ import { IProfile } from "../types";
 import NewPostButton from "../components/newPostButton/NewPostButton";
 import PostsView from "../components/PostsView";
 import WorkoutView from "../components/WorkoutView";
+import { BACKEND_URL } from "../config";
+import api from "../Api";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState<IProfile>({
-    postId: "1",
-    name: "Gal Yaakov",
-    email: "GalYaakov100@gmail.com",
-    gender: "male",
-    height: "179cm",
-    whight: "100kg",
+    postId: "",
+    name: "",
+    email: "",
+    gender: "",
+    height: "",
+    whight: "",
     photo: "",
   });
   const [view, setView] = React.useState<"workout" | "posts">("workout");
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem("token"); 
+        const response = await api.get(`${BACKEND_URL}/api/user/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+  
+        setUserProfile({
+          postId: response.data.postId || "",
+          name: `${response.data.firstName || ""} ${response.data.lastName || ""}`,
+          email: response.data.email || "",
+          gender: response.data.gender || "",
+          height: response.data.height || "",
+          whight: response.data.weight || "", 
+          photo: response.data.photo || "",
+        });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        alert("Failed to fetch user profile. Please try again.");
+      }
+    };
+  
+    fetchUserProfile();
+  }, []);
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -60,10 +90,9 @@ const Profile: React.FC = () => {
             height: 150,
             backgroundColor: "#4343f054",
           }}
+          src={userProfile.photo ? `${BACKEND_URL}/${userProfile.photo}` : undefined}
         >
-          {userProfile.photo ? (
-            userProfile.photo
-          ) : (
+          {!userProfile.photo && (
             <InsertPhoto sx={{ width: 80, height: 80, color: "white" }} />
           )}
         </Avatar>

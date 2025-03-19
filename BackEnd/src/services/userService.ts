@@ -13,6 +13,12 @@ export class UserService {
     }).exec();
   }
 
+  async updateUserByEmail(email: string, updateData: Partial<IUser>) {
+    return await User.findOneAndUpdate({ email }, updateData, {
+      new: true,
+    }).exec();
+  }
+
   async validateUser(email: string, password: string): Promise<IUser | null> {
     const user = await User.findOne({ email });
     if (user && (await bcrypt.compare(password, user.password))) {
