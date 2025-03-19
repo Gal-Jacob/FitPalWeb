@@ -30,9 +30,9 @@ export interface IProfile {
   id: string;
   name: string;
   email: string;
-  photo: string;
+  image: string;
   height: string;
-  whight: string;
+  weight: string;
   gender: "male" | "female";
 }
 

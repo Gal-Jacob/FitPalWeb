@@ -33,7 +33,11 @@ interface FormState {
   details: string;
 }
 
-const NewPost = () => {
+interface NewPostProps {
+  username: string | null; 
+}
+
+const NewPost: React.FC<NewPostProps> = ({ username }) => {
   const navigate = useNavigate();
 
   const [image, setImage] = useState<string | null | File>(null);
@@ -45,24 +49,24 @@ const NewPost = () => {
     details: "",
   });
 
-  // Handle image selection
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileInput = event.target.files;
 
     if (fileInput && fileInput[0]) {
-      const file = fileInput[0]; // Get the first file selected
-      setImage(file); // Set base64 image preview
+      const file = fileInput[0]; 
+      setImage(file); 
 
-      // Optionally, preview the image (for visual feedback)
+      
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file); // Read the file as data URL (for preview)
+      reader.readAsDataURL(file); 
     }
   };
 
-  // Handle time selection
+  
   const handleTimeChange = (
     key: "startTime" | "endTime",
     value: Dayjs | null
@@ -70,7 +74,7 @@ const NewPost = () => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  // Handle select and text field changes
+ 
   const handleChange = (
     event: React.ChangeEvent<{ value: unknown } | HTMLInputElement>
   ) => {
@@ -79,7 +83,7 @@ const NewPost = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
+  
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -88,7 +92,7 @@ const NewPost = () => {
     }
 
     const form = new FormData();
-    form.append("author", "Gal Yaakov"); // TODO: Replace with logged-in user's name
+    form.append("author", username || ""); 
     form.append("startTime", formData.startTime.format());
     form.append("endTime", formData.endTime.format());
     form.append("workout", formData.workout);
@@ -157,7 +161,6 @@ const NewPost = () => {
                     </Avatar>
                   )}
 
-                  {/* Hidden file input */}
                   <input
                     accept="image/*"
                     type="file"
@@ -166,7 +169,6 @@ const NewPost = () => {
                     onChange={handleImageChange}
                   />
 
-                  {/* Upload Button */}
                   <label htmlFor="image-upload">
                     <Button
                       sx={{ marginTop: 1 }}
@@ -187,7 +189,7 @@ const NewPost = () => {
                     padding: "0px",
                   }}
                 >
-                  {/* Start Time Picker */}
+
                   <TimePicker
                     label="Start Time"
                     value={formData.startTime}
@@ -205,7 +207,7 @@ const NewPost = () => {
                         >
                     ) => <TextField {...params} fullWidth margin="normal" />}
                   />
-                  {/* End Time Picker */}
+
                   <TimePicker
                     label="End Time"
                     value={formData.endTime}
@@ -225,7 +227,7 @@ const NewPost = () => {
                   />
                 </div>
 
-                {/* Select Input */}
+
                 <FormControl fullWidth margin="normal">
                   <InputLabel>Workout</InputLabel>
                   <Select
@@ -239,7 +241,7 @@ const NewPost = () => {
                   </Select>
                 </FormControl>
 
-                {/* Text Field */}
+
                 <TextField
                   name="details"
                   label="Details"
@@ -251,7 +253,7 @@ const NewPost = () => {
                   onChange={handleChange}
                 />
 
-                {/* Submit Button */}
+
                 <Button
                   type="submit"
                   variant="contained"
