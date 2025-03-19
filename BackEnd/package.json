@@ -9,6 +9,7 @@
     "dev": "ts-node-dev src/app.ts"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "@types/swagger-ui-express": "^4.1.8",
     "axios": "^1.8.3",
     "bcrypt": "^5.0.1",

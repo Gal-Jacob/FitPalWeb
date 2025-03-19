@@ -38,7 +38,9 @@ export interface IProfile {
 export interface IExercise {
   name: string;
   sets: string | number;
-  reps: string;
+  reps: string | string;
+  restPeriod?: string;
+  notes?: string;
 }
 
 export interface IGuideline {
@@ -51,6 +53,22 @@ export interface ISchedule {
   workout: string;
 }
 
+export interface IScheduleCardProps {
+  schedule: ISchedule[];
+}
+
 export interface IWorkoutPlan {
   exercises: IExercise[];
+}
+
+interface IWorkoutDay {
+  day: string;
+  focus: string;
+  exercises: IExercise[];
+  warmup: string[];
+  cooldown: string[];
+}
+
+export interface IWorkoutPlanProps {
+  days: IWorkoutDay[];
 }
