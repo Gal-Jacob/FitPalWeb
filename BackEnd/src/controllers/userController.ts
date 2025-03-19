@@ -10,8 +10,8 @@ class UserController {
 
     public getUserProfile = async (req: Request, res: Response) => {
         try {
-            const userId = (req as any).user.id;
-            const userProfile = await this.userService.findUserById(userId);
+            const email = (req as any).user.email;
+            const userProfile = await this.userService.findUserByEmail(email);
 
             if (!userProfile) {
                 return res.status(404).json({ message: 'User not found' });
@@ -22,8 +22,7 @@ class UserController {
 
             return res.status(500).json({ message: 'Server error', error });
         }
-    };
-
+    }
     public updateUserProfile = async (req: Request, res: Response) => {
         try {
             const userId = (req as any).user.id; 

@@ -9,6 +9,8 @@ export interface IUser extends Document {
     googleId?: string;
     accessToken?: string;
     refreshToken?: string;
+    lastWorkoutGenerated?: Date;
+    workout?: object;
     comparePassword: (password: string) => Promise<boolean>;
 }
 
@@ -43,6 +45,13 @@ const userSchema: Schema<IUser> = new Schema({
         type: String,
         trim: true,
     },
+    lastWorkoutGenerated: {
+        type: Date,
+    },
+    workout: { 
+        type: Object,
+    }
+
 }, { timestamps: true });
 
 userSchema.methods.comparePassword = async function (password: string): Promise<boolean> {
