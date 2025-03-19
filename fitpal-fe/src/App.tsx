@@ -10,7 +10,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
 import { useEffect } from "react";
 
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+export const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const theme = createTheme({
   palette: {
@@ -36,14 +37,14 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
-
+    const token = params.get("token");
+    console.log({ token });
     if (token) {
-      localStorage.setItem('token', token);
-
-      navigate('/');
+      localStorage.setItem("token", token);
+      navigate("/");
     }
   }, [navigate]);
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -53,13 +54,13 @@ const App: React.FC = () => {
           <Route path="/Home" element={<Home />} />
           <Route path="/Profile" element={<Profile />} />
           <Route path="/EditProfile" element={<EditProfile />} />
-          <Route path="/Login" element={<AuthPages  />} />
+          <Route path="/Login" element={<AuthPages />} />
           <Route path="/Messages" element={<Messages />} />
           <Route path="/NewPost" element={<NewPost />} />
         </Routes>
       </ThemeProvider>
     </>
   );
-}
+};
 
 export default App;
