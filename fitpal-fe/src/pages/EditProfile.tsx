@@ -54,9 +54,13 @@ const EditProfile = () => {
           weight: response.data.weight || "",
           firstName: response.data.firstName || "",
           lastName: response.data.lastName || "",
-          image: response.data.iamge || null,
+          image: response.data.image || null,
         });
-        setImage(response.data.image || null); 
+
+        if (response.data.image) {
+          setImage(`${response.data.image}`);
+          setImagePreview(`${response.data.image}`);
+        }
       } catch (error) {
         console.error("Error fetching profile:", error);
         alert("Failed to fetch profile. Please try again.");
@@ -122,7 +126,6 @@ const EditProfile = () => {
           {
             firstName: formData.firstName,
             lastName: formData.lastName,
-            image: image,
           },
           {
             headers: {
