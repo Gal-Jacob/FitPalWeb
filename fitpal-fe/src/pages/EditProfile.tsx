@@ -1,41 +1,25 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Button,
   Container,
-  Card,
   CardContent,
   TextField,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  FilledTextFieldProps,
-  OutlinedTextFieldProps,
-  StandardTextFieldProps,
-  TextFieldVariants,
-  Box,
   Avatar,
   InputAdornment,
-  Grid2,
+  Grid2 as Grid,
 } from "@mui/material";
-import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { Person } from "@mui/icons-material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, { Dayjs } from "dayjs";
-import { JSX } from "react/jsx-runtime";
-import { useNavigate } from "react-router-dom";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PersonIcon from "@mui/icons-material/Person";
 
 interface FormState {
   height: string;
   weight: string;
 }
 
-export default function EditProfile() {
+const EditProfile = () => {
   const navigate = useNavigate();
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -102,7 +86,7 @@ export default function EditProfile() {
                     <Avatar
                       sx={{ width: 150, height: 150, backgroundColor: "white" }}
                     >
-                      <PersonIcon
+                      <Person
                         sx={{ width: 120, height: 120, color: "#4343f054" }}
                       />
                     </Avatar>
@@ -131,8 +115,8 @@ export default function EditProfile() {
                 </div>
                 <Typography variant="h5">Gal Yaakov</Typography>
 
-                <Grid2 container spacing={2}>
-                  <Grid2 size={6}>
+                <Grid container spacing={2}>
+                  <Grid size={6}>
                     {/* Text Field */}
                     <TextField
                       name="height"
@@ -150,8 +134,8 @@ export default function EditProfile() {
                       }}
                       onChange={handleChange}
                     />
-                  </Grid2>
-                  <Grid2 size={6}>
+                  </Grid>
+                  <Grid size={6}>
                     {/* Text Field */}
                     <TextField
                       name="weight"
@@ -169,8 +153,8 @@ export default function EditProfile() {
                       }}
                       onChange={handleChange}
                     />
-                  </Grid2>
-                </Grid2>
+                  </Grid>
+                </Grid>
 
                 {/* Submit Button */}
                 <Button
@@ -198,4 +182,6 @@ export default function EditProfile() {
       </Container>
     </div>
   );
-}
+};
+
+export default EditProfile;
