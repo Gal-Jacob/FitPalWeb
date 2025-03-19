@@ -11,6 +11,8 @@ interface Message {
   sender: string;
 }
 
+export const WEB_SOCKET_URL = process.env.VITE_WSS_URL || "http://localhost:8000";
+
 const ChatRoom: React.FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -21,7 +23,7 @@ const ChatRoom: React.FC = () => {
   const socketRef = useRef<Socket | null>(null)
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8000")
+    socketRef.current = io(WEB_SOCKET_URL)
 
     socketRef.current.on("connect", () => {
         console.log("Connected to WebSocket");
@@ -138,7 +140,6 @@ const ChatRoom: React.FC = () => {
           </List>
         </div>
 
-        {/* Input field and Send button */}
         <div style={{ display: "flex", alignItems: "center", padding: '10px' }}>
           <TextField
             variant="outlined"

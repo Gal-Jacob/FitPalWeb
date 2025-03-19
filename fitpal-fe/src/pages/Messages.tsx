@@ -3,6 +3,7 @@ import { Card, CardContent, Divider, Avatar, List, ListItem, ListItemAvatar, Lis
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { io, Socket } from "socket.io-client";
+import { WEB_SOCKET_URL } from "./Chat";
 
 export type LastChatInfo = {
   id: string;
@@ -42,7 +43,7 @@ const Messages: React.FC = () => {
     const socketRef = useRef<Socket | null>(null)
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8000")
+    socketRef.current = io(WEB_SOCKET_URL);
 
     socketRef.current.on("connect", () => {
       console.log("Connected to WebSocket")
