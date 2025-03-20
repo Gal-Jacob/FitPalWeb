@@ -6,7 +6,9 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "build": "tsc",
-    "dev": "ts-node-dev src/app.ts"
+    "dev": "ts-node-dev src/app.ts",
+    "test": "jest",
+    "test:debug": "jest --runInBand"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
@@ -28,19 +30,26 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.8",
     "@types/express-session": "^1.18.1",
+    "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.10.2",
     "@types/morgan": "^1.9.9",
     "@types/multer": "^1.4.12",
     "@types/passport": "^1.0.0",
     "@types/passport-google-oauth20": "^2.0.0",
+    "@types/supertest": "^6.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
     "morgan": "^1.10.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^1.1.8",
     "typescript": "^5.8.2"

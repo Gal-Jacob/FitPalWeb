@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { PostService } from '../services/postService';
-import { BACKEND_URL } from '../app';
+import { BACKEND_URL } from '../server';
 
 class PostController {
     private postService: PostService;
