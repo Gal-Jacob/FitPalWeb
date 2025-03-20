@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
-import { BACKEND_URL } from '../app';
+import { BACKEND_URL } from '../server';
 
 class UserController {
     private userService: UserService;
