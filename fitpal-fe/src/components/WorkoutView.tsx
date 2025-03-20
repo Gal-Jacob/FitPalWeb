@@ -85,8 +85,9 @@ const WorkoutView: React.FC = () => {
       };
 
       console.log({ workoutPlan });
-
-      setWorkoutData(workoutPlan);
+      if (workoutPlan.plan != null) {
+        setWorkoutData(workoutPlan);
+      }
     };
 
     fetchWorkoutData();
