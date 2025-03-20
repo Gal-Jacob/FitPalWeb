@@ -27,6 +27,7 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import Swal from "sweetalert2";
 import { error } from "console";
 import api from "../Api";
+import { BACKEND_URL } from "../config";
 
 interface FormState {
   startTime: Dayjs | null;
@@ -36,7 +37,7 @@ interface FormState {
 }
 
 interface NewPostProps {
-  username: string | null; 
+  username: string | null;
 }
 
 const NewPost: React.FC<NewPostProps> = ({ username }) => {
@@ -51,24 +52,21 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
     details: "",
   });
 
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileInput = event.target.files;
 
     if (fileInput && fileInput[0]) {
-      const file = fileInput[0]; 
-      setImage(file); 
+      const file = fileInput[0];
+      setImage(file);
 
-      
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file); 
+      reader.readAsDataURL(file);
     }
   };
 
-  
   const handleTimeChange = (
     key: "startTime" | "endTime",
     value: Dayjs | null
@@ -76,7 +74,6 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
- 
   const handleChange = (
     event: React.ChangeEvent<{ value: unknown } | HTMLInputElement>
   ) => {
@@ -85,7 +82,6 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -94,7 +90,7 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
     }
 
     const form = new FormData();
-    form.append("author", username || ""); 
+    form.append("author", username || "");
     form.append("startTime", formData.startTime.format());
     form.append("endTime", formData.endTime.format());
     form.append("workout", formData.workout);
@@ -102,7 +98,7 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
     form.append("image", image);
 
     api
-      .post("http://localhost:5000/api/post/add", form, {
+      .post(`${BACKEND_URL}/api/post/add`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -191,7 +187,6 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
                     padding: "0px",
                   }}
                 >
-
                   <TimePicker
                     label="Start Time"
                     value={formData.startTime}
@@ -229,7 +224,6 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
                   />
                 </div>
 
-
                 <FormControl fullWidth margin="normal">
                   <InputLabel>Workout</InputLabel>
                   <Select
@@ -243,7 +237,6 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
                   </Select>
                 </FormControl>
 
-
                 <TextField
                   name="details"
                   label="Details"
@@ -254,7 +247,6 @@ const NewPost: React.FC<NewPostProps> = ({ username }) => {
                   value={formData.details}
                   onChange={handleChange}
                 />
-
 
                 <Button
                   type="submit"
