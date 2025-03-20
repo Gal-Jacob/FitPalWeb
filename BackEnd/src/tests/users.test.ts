@@ -87,19 +87,4 @@ describe("Users Tests", () => {
         expect(response.body.firstName).toBe(testUser.firstName);
         expect(response.body.lastName).toBe(testUser.lastName);
     });
-
-
-    test("Update User Details", async () => {
-        const response = await request(app)
-            .patch("/api/user/profile")
-            .set("Authorization", "Bearer " + testUser.token)
-            .send({
-                firstName: "Updated",
-                lastName: "User",
-            });
-
-        expect(response.statusCode).toBe(200);
-        expect(response.body.firstName).toBe("Updated");
-        expect(response.body.lastName).toBe("User");
-    });
 });

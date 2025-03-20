@@ -47,5 +47,9 @@ afterAll((done) => {
 
 
 describe("Workout Tests", () => {
-
+     test("get my workout", async () => {
+            const response = await request(app).get("/api/workout/my").set("Authorization", "Bearer " + testUser.token)
+            expect(response.statusCode).toBe(200);
+            expect(response.text).toBe('null');
+    });
 });
