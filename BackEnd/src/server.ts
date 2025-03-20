@@ -27,6 +27,11 @@ export const initApp = async () => {
           credentials: true,
         })
       );
+
+      app.use((req, res, next) => {
+        res.header("Access-Control-Allow-Credentials", "true");
+        next();
+      });
       
       app.use(morgan("dev"));
       app.use(express.json());
