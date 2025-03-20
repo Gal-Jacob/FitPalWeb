@@ -8,14 +8,14 @@ import Messages from "./pages/Messages";
 import NewPost from "./pages/NewPost";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AuthPages from "./pages/Auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Chatroom from "./pages/Chat";
 import axios from "axios";
 
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-import { EMAIL_LS, TOKEN_LS } from "./config";
+import { TOKEN_LS, EMAIL_LS } from "./config";
 import api from "./Api";
 
 const theme = createTheme({
@@ -39,6 +39,8 @@ const theme = createTheme({
 
 const App: React.FC = () => {
   const navigate = useNavigate();
+  const [image, setImage] = useState<string | null >(null);
+  const [username, setUsername] = useState<string | null >(null);
 
   useEffect(() => {
     const checkTokenAndFetchProfile = async () => {
@@ -65,6 +67,8 @@ const App: React.FC = () => {
         });
 
         localStorage.setItem(EMAIL_LS, response.data.email);
+        setImage(response.data.image);
+        setUsername(`${response.data.firstName} ${response.data.lastName}`);
       } catch (error) {
         console.error(error);
         localStorage.removeItem("token"); 
@@ -78,7 +82,7 @@ const App: React.FC = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <NavBar />
+        <NavBar image={image} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Home" element={<Home />} />
@@ -86,7 +90,7 @@ const App: React.FC = () => {
           <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Login" element={<AuthPages />} />
           <Route path="/Messages" element={<Messages />} />
-          <Route path="/NewPost" element={<NewPost />} />
+          <Route path="/NewPost" element={<NewPost username={username} />} />
           <Route path="/chat/:chatId" element={<Chatroom />} />
         </Routes>
       </ThemeProvider>

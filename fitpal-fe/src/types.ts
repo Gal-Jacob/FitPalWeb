@@ -30,9 +30,9 @@ export interface IProfile {
   id: string;
   name: string;
   email: string;
-  photo: string;
+  image: string;
   height: string;
-  whight: string;
+  weight: string;
   gender: "male" | "female";
 }
 
@@ -73,3 +73,14 @@ interface IWorkoutDay {
 export interface IWorkoutPlanProps {
   days: IWorkoutDay[];
 }
+
+export type WorkoutPlanRequest = {
+  fitnessLevel: "beginner" | "intermediate" | "advanced";
+  goals: string[];
+  availability: number;
+  duration: number;
+  intensity: string;
+  medicalConditions?: string[];
+  preferences?: string[];
+  equipment?: string[];
+};

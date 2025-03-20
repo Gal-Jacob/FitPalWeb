@@ -18,6 +18,10 @@ interface IPage {
   uri: string;
 }
 
+interface NavBarProps {
+  image: string | null; 
+}
+
 const pages: IPage[] = [
   { name: "Home", uri: "Home" },
   { name: "Messages", uri: "Messages" },
@@ -27,8 +31,7 @@ const settings: IPage[] = [
   { name: "Profile", uri: "Profile" },
   { name: "Logout", uri: "Login" },
 ];
-
-const NavBar = () => {
+const NavBar: React.FC<NavBarProps> = ({ image }) => {
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -82,7 +85,7 @@ const NavBar = () => {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       alt="Remy Sharp"
-                      src="/static/images/avatar/2.jpg"
+                      src={image || "/static/images/avatar/2.jpg"}
                     />
                   </IconButton>
                 </Tooltip>

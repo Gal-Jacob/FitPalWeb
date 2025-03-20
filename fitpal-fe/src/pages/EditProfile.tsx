@@ -22,19 +22,18 @@ interface FormState {
   weight: string;
   firstName: string;
   lastName: string;
-  photo: string | null;
+  image: string | null;
 }
 
 const EditProfile = () => {
   const navigate = useNavigate();
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [formData, setFormData] = useState<FormState>({
     height: "",
     weight: "",
     firstName: "",
     lastName: "",
-    photo: null,
+    image: null,
   });
   const [isEditingName, setIsEditingName] = useState<boolean>(false);
   const [image, setImage] = useState<string | null | File>(null);
@@ -55,9 +54,13 @@ const EditProfile = () => {
           weight: response.data.weight || "",
           firstName: response.data.firstName || "",
           lastName: response.data.lastName || "",
-          photo: response.data.photo || null,
+          image: response.data.image || null,
         });
-        setSelectedImage(response.data.photo || null); // Set the current photo
+
+        if (response.data.image) {
+          setImage(`${response.data.image}`);
+          setImagePreview(`${response.data.image}`);
+        }
       } catch (error) {
         console.error("Error fetching profile:", error);
         alert("Failed to fetch profile. Please try again.");
@@ -72,16 +75,11 @@ const EditProfile = () => {
   
     if (fileInput && fileInput[0]) {
       const file = fileInput[0];
-      console.log("Selected file:", file); // Debugging
       setImage(file);
   
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log("FileReader result:", reader.result); // Debugging
         setImagePreview(reader.result as string);
-      };
-      reader.onerror = (error) => {
-        console.error("Error reading file:", error);
       };
       reader.readAsDataURL(file);
     }
@@ -103,10 +101,12 @@ const EditProfile = () => {
         {
           weight: formData.weight,
           height: formData.height,
+          image: image,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`, 
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -126,7 +126,6 @@ const EditProfile = () => {
           {
             firstName: formData.firstName,
             lastName: formData.lastName,
-            image: image,
           },
           {
             headers: {
@@ -166,7 +165,7 @@ const EditProfile = () => {
                     alignItems: "center",
                   }}
                 >
-                  {selectedImage ? (
+                  {image ? (
                     <Avatar
                       src={imagePreview}
                       sx={{ width: 150, height: 150 }}
