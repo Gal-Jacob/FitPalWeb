@@ -48,6 +48,7 @@ export class WorkoutService {
       try {
         const plan: WorkoutPlan = parseWorkoutPlanFromJson(workoutPlanText);
         plan.email = email
+        await WorkoutPlanMongoModel.deleteMany({ email: email }).exec();
         const workout = new WorkoutPlanMongoModel(plan) //save workout to mongo
         workout.save()
 
