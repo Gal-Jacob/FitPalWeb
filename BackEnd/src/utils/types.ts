@@ -30,9 +30,10 @@ export type WorkoutPlanResponse =
   | { success: false; error: string };
 
 export interface WorkoutPlan {
+  email?: string;
   summary: string;
   days: WorkoutDay[];
-  notes?: string[];
+  notes: string[];
   nutritionTips?: string[];
   progressionPlan?: string;
 }

@@ -29,11 +29,9 @@ export const validateWorkoutPlanRequest = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = req.params;
-  console.log(userId);
-
+  const { email } = req.params;
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({email: email});
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -59,7 +57,10 @@ export const validateWorkoutPlanRequest = async (
     });
   }
 
-  const { fitnessLevel, goals, availability } = req.body as WorkoutPlanRequest;
+  const { fitnessLevel, goals, availability } = req.body.data as WorkoutPlanRequest;
+
+console.log({ fitnessLevel, goals, availability });
+
 
   if (!fitnessLevel) {
     return res.status(400).json({

@@ -2,13 +2,30 @@ import { Router } from "express";
 
 import WorkoutController from "../controllers/workoutController";
 import { validateWorkoutPlanRequest } from "../utils/workoutMiddleware";
+import authMiddleware from "../utils/authMiddleware";
 
 const workoutRouter = Router();
 const workoutController = new WorkoutController();
 
 /**
  * @swagger
- * /api/workout/generate/{userId}:
+ * /api/workout/my:
+ *   get:
+ *     summary: Get user workout
+ *     tags: [Workout]
+ *     security:
+ *       - BearerAuth: [] 
+ *     responses:
+ *       200:
+ *         description: Get user workout successfully
+ *       401:
+ *         description: Unauthorized
+ */
+workoutRouter.get('/my', authMiddleware, workoutController.getUserPosts);/**
+
+/**
+ * @swagger
+ * /api/workout/generate/{email}:
  *   post:
  *     summary: Generate a workout plan
  *     tags: [Workout]
@@ -16,7 +33,7 @@ const workoutController = new WorkoutController();
  *       - BearerAuth: []
  *     parameters:
  *       - in: path
- *         name: userId
+ *         name: email
  *         required: true
  *         schema:
  *           type: string
@@ -75,7 +92,7 @@ const workoutController = new WorkoutController();
  *         description: Internal server error
  */
 workoutRouter.post(
-  "/generate/:userId",
+  "/generate/:email",
   validateWorkoutPlanRequest,
   workoutController.generateWorkoutPlan.bind(workoutController)
 );
