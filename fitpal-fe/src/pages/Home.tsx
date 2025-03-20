@@ -14,12 +14,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 import NewPostButton from "../components/newPostButton/NewPostButton";
-import Post from "../components/Post";
 import { IPost } from "../types";
 import { BACKEND_URL } from "../config";
 import api from "../Api";
 import { isAxiosError } from "axios";
 import Swal from "sweetalert2";
+import Post from "../components/post";
 
 function Home() {
   const [posts, setPosts] = useState([]);
