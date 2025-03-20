@@ -1,21 +1,30 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
+  WorkoutPlan,
   WorkoutPlanRequest,
   WorkoutPlanResponse,
-  WorkoutPlan,
 } from "../utils/types";
 import { parseWorkoutPlanFromJson } from "../utils/workoutParser";
+import { WorkoutPlanMongoModel } from "../db/models/workoutModel";
 
 export class WorkoutService {
+
+  async getUserWorkout(email: string) {
+    return await WorkoutPlanMongoModel.findOne({email: email}).select("-__v -_id").exec();
+  }
+
   /**
    * Generate a workout plan based on user preferences
    * @param workoutData User workout preferences
    * @returns WorkoutPlanResponse with either a plan or error
    */
   async generateWorkoutPlan(
+    email: string,
     workoutData: WorkoutPlanRequest,
     ai: GoogleGenerativeAI
   ): Promise<WorkoutPlanResponse> {
+    console.log({workoutData});
+    
     try {
       if (
         !workoutData.fitnessLevel ||
@@ -37,7 +46,10 @@ export class WorkoutService {
       const workoutPlanText = (await result.response).text();
 
       try {
-        const plan = parseWorkoutPlanFromJson(workoutPlanText);
+        const plan: WorkoutPlan = parseWorkoutPlanFromJson(workoutPlanText);
+        plan.email = email
+        const workout = new WorkoutPlanMongoModel(plan) //save workout to mongo
+        workout.save()
 
         return {
           success: true,
@@ -154,6 +166,6 @@ IMPORTANT:
 9. DO NOT include explanation text outside the JSON structure
 10. If a user has medical conditions, provide appropriate exercise modifications
 11. Ensure the workout plan is safe, effective, and tailored to the user's goals
-12. Make sure to add a suggested weekly schedule with rest days`;
+12. Make sure to add a suggested weekly schedule with rest days - start with "Suggested schedule", in the following format: "Suggested schedule: WEEKDAY - Day 1, WEEKDAY - Day 2, etc. ."`;
   }
 }
