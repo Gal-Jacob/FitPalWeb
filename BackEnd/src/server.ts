@@ -10,14 +10,15 @@ import workoutRouter from "./routes/workoutRouter";
 import connectDB from "./db/db";
 import passport from "./utils/googlePassport";
 import setupSwagger from "./utils/swagger";
-
+import { fileURLToPath } from "url";
 import './utils/multerFilesUpload'
+import path from "path";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-export const BACKEND_URL = `http://localhost:${PORT}`
+export const BACKEND_URL = `${process.env.BACKEND_URL}:${PORT}`
 
 export const initApp = async () => {
     app.use(
@@ -63,10 +64,19 @@ export const initApp = async () => {
       
       app.use('/post-assets', express.static('post-assets'))
       
-      app.get('/', (req, res) => {
+      app.get('/api/check', (req, res) => {
           res.send('API is running...');
       });      
 
+
+      // const __filename = fileURLToPath(import.meta.url);
+      // const __dirname = path.dirname(__filename);
+      // //Expost FE dist folder
+      // app.use(express.static(path.join(__dirname, "fe-dist"))); // For React
+      // // For any route not handled by the API, serve index.html
+      // app.get("*", (req, res) => {
+      //   res.sendFile(path.join(__dirname, "..", "my-vite-app", "dist", "index.html"));
+      // });
 
       return app
 }
