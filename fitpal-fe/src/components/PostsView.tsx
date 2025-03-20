@@ -13,7 +13,7 @@ import {
 import { InsertPhoto } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IPost } from "../types";
-import Post from "./Post";
+import Post from "./post";
 import api from "../Api";
 import { BACKEND_URL } from "../config";
 import { isAxiosError } from "axios";
