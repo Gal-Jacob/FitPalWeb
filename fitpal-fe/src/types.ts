@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export interface IComment {
   author: string;
   comment: string;

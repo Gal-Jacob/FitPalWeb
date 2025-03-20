@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, Divider, Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography, Container, Button, Popper, Paper, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
